@@ -4,7 +4,8 @@ import openapiTS from "openapi-typescript";
 import * as vscode from "vscode";
 import { parse, print, types, prettyPrint } from "recast";
 import * as tsParser from "recast/parsers/typescript.js";
-import { writeDefinitionFile } from "../utils";
+import { writeDefinitionFile } from "../utils/genDefinition";
+import html from "../webview/index.html";
 
 const axios = require("axios");
 
@@ -43,21 +44,51 @@ async function getApiUrl() {
   return url;
 }
 
+interface ChannelData {
+  // methods: string[];
+  // template: string;
+  servicePath: string;
+  routes: Array<{ method: string; url: string }>;
+
+  errorMessage?: string;
+  success?: boolean
+}
+
+async function loadWebView() {
+  const panel = vscode.window.createWebviewPanel(
+    "SwaggerGen",
+    "SwaggerGen",
+    vscode.ViewColumn.One,
+    {
+      enableScripts: true,
+      retainContextWhenHidden: true,
+    },
+  );
+  panel.webview.html = html;
+  panel.webview.onDidReceiveMessage((message: ChannelData) => {
+    console.log("webview => message", message);
+    panel.webview.postMessage({ msg: "success", success: true });
+  });
+}
+
 /**
  * 输入swagger api url，生成Definitions文件
+ * webView 通过api，生成definition和request文件模板
+ * 最终目的是生成 get 文件
  */
 export async function generateDefinitions() {
   try {
-    const openApiJson = await fetchOpenApiJson();
-    const swaggerVersion = Number(openApiJson.swagger);
-    const tsSourceCode = await openapiTS(openApiJson, {
-      version: swaggerVersion,
-    });
-    const tsAst: TsAst = parse(tsSourceCode, {
-      parser: tsParser,
-    });
-    const apiUrl = await getApiUrl();
-    await writeDefinitionFile(tsAst, apiUrl);
+    // const openApiJson = await fetchOpenApiJson();
+    // const swaggerVersion = Number(openApiJson.swagger);
+    // const tsSourceCode = await openapiTS(openApiJson, {
+    //   version: swaggerVersion,
+    // });
+    // const tsAst: TsAst = parse(tsSourceCode, {
+    //   parser: tsParser,
+    // });
+    // const apiUrl = await getApiUrl();
+    // await writeDefinitionFile(tsAst, apiUrl);
+    await loadWebView();
   } catch (error: any) {
     vscode.window.showErrorMessage(error.message);
   }

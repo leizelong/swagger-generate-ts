@@ -1,13 +1,15 @@
 import * as fs from "fs";
-import openapiTS from "openapi-typescript";
 import * as tsParser from "recast/parsers/typescript.js";
 import { parse, print, types, prettyPrint } from "recast";
 import * as path from "path";
+import * as vscode from "vscode";
+import type {
+  TSInterfaceDeclaration,
+  TSPropertySignature,
+  File as TsAst,
+} from "@babel/types";
 
-type TsAst = import("@babel/types").File;
-
-type TSInterfaceDeclaration = import("@babel/types").TSInterfaceDeclaration;
-type TSPropertySignature = import("@babel/types").TSPropertySignature;
+// type TsAst = import("@babel/types").File;
 
 type TargetNames = "paths" | "definitions" | "operations" | "external";
 
@@ -380,11 +382,18 @@ async function writeDefinitions(
   await generateFile(dirPath, targetAst);
 }
 
+function getProjectRoot() {
+  if (!vscode.workspace.workspaceFolders?.length) {
+    return __dirname;
+  }
+  return vscode.workspace.workspaceFolders[0].uri.path;
+}
+
 function getDirPath(routePath: string) {
-  const baseDir = "../definitions";
-  // const __dirname = path.resolve();
+  const baseDir = "definitions";
+  const projectRoot = getProjectRoot();
   const dirPath = path.resolve(
-    __dirname,
+    projectRoot,
     baseDir,
     routePath.replace(/\/(.*)\/.*/, "$1"),
   );

@@ -6,6 +6,10 @@
   "engines": {
     "vscode": "^1.73.0"
   },
+  "repository": {
+    "url": "https://github.com/leizelong/swagger-generate-ts"
+  },
+  "license": "",
   "categories": [
     "Other"
   ],
@@ -24,22 +28,22 @@
       "type": "object",
       "title": "设置openApiJson获取Url",
       "properties": {
-          "swagger-generate-ts.settingOpenApiJsonUrl": {
-              "type": "string",
-              "default": "http://un-api.test.bbmall.xyb2b.com.cn/admin/v2/api-docs",
-              "description": "可以获取openApiJson的Url"
-          }
+        "swagger-generate-ts.settingOpenApiJsonUrl": {
+          "type": "string",
+          "default": "http://un-api.test.bbmall.xyb2b.com.cn/admin/v2/api-docs",
+          "description": "可以获取openApiJson的Url"
+        }
       }
-  }
+    }
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run package",
+    "vscode:prepublish": "npm run package",
     "compile": "webpack",
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
@@ -53,8 +57,10 @@
     "@typescript-eslint/parser": "^5.42.0",
     "@vscode/test-electron": "^2.2.0",
     "ast-types": "^0.14.2",
+    "babylon": "^6.18.0",
     "eslint": "^8.26.0",
     "glob": "^8.0.3",
+    "html-loader": "^4.2.0",
     "mocha": "^10.1.0",
     "ts-loader": "^9.4.1",
     "typescript": "^4.8.4",
