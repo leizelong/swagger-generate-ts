@@ -62,18 +62,19 @@ export async function generateDefinitions() {
 
     // await genDefinitions(receiveData.routes, openApiData);
     // await genServices(receiveData, openApiData);
-    const onReceiveMessage = async (channelData: ChannelData) => {
-      console.log("webview => message", channelData);
-      try {
-        await genDefinitions(channelData.routes, openApiData);
-        await genServices(channelData, openApiData);
-      } catch (error) {
-        console.log("error", error);
-      }
 
-      panel.webview.postMessage({ msg: "success", success: true });
-    };
-    const panel = loadWebView(onReceiveMessage);
+      const onReceiveMessage = async (channelData: ChannelData) => {
+        console.log("webview => message", channelData);
+        try {
+          await genDefinitions(channelData.routes, openApiData);
+          await genServices(channelData, openApiData);
+        } catch (error) {
+          console.log("error", error);
+        }
+
+        panel.webview.postMessage({ msg: "success", success: true });
+      };
+      const panel = loadWebView(onReceiveMessage);
   } catch (error: any) {
     vscode.window.showErrorMessage(error.message);
   }

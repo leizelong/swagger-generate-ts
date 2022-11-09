@@ -1,9 +1,11 @@
-import { post, get } from '@/utils/request';
+// @ts-nocheck
+
+import { post, get } from "@/utils/request";
 import {
   增加属性绑定关系Request,
   ApiResultListQueryChannelCategoryResponse,
   ApiResultboolean,
-} from '@definitions/media/refluxCategory';
+} from "@definitions/media/refluxCategory";
 
 export function queryChannelCategory(): Promise<ApiResultListQueryChannelCategoryResponse> {
   return get(`/admin/media/refluxCategory/queryChannelCategory`);

@@ -318,7 +318,6 @@ export async function genDefinitions(
     const { method, url } = route;
     const operationId = getMethodOperationId(openApiJson, url, method);
     await writeDefinitionFile(openApiAst, operationId, url);
-    // console.log("methodEntry", methodEntry);
   }
 
   for (const route of routes) {

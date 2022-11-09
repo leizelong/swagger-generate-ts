@@ -50,29 +50,16 @@ function addDefinitionImportDeclaration(
   let targetImportNode: ImportDeclaration | undefined;
   for (let index = 0; index < body.length; index++) {
     const node = body[index];
-    try {
-      if (namedTypes.ImportDeclaration.assert(node)) {
-        importNodes.push(node);
-        lastImportNodeIdx = index;
-        const nodeSource = node.source.value;
-        if (nodeSource === importPath) {
-          targetImportNode = node;
-        }
+    if (node.type === "ImportDeclaration") {
+      importNodes.push(node);
+      lastImportNodeIdx = index;
+      const nodeSource = node.source.value;
+      if (nodeSource === importPath) {
+        targetImportNode = node;
       }
-    } catch (error) {
-      console.log("error", error);
+    } else if (node.type === "ExportNamedDeclaration") {
       break;
     }
-    // if (namedTypes.ImportDeclaration.assert(node)) {
-    //   importNodes.push(node);
-    //   lastImportNodeIdx = index;
-    //   const nodeSource = node.source.value;
-    //   if (nodeSource === importPath) {
-    //     targetImportNode = node;
-    //   }
-    // } else if (namedTypes.ExportNamedDeclaration.assert(node)) {
-    //   break;
-    // }
   }
 
   if (!targetImportNode) {
@@ -99,7 +86,7 @@ function addDefinitionImportDeclaration(
       })
       .filter(item => !!item);
     for (const definitionKey of definitionKeys) {
-      if (!specifierKeys.includes(definitionKey)) {
+      if (definitionKey && !specifierKeys.includes(definitionKey)) {
         targetImportNode.specifiers.push(
           importSpecifier(identifier(definitionKey)) as any,
         );
@@ -235,7 +222,7 @@ export async function genServices(
   const { openApiJson, openApiAst } = openApiData;
   const { servicePath, routes } = channelData;
   const projectRoot = getProjectRoot();
-  const { targetAst: testAst, fileExist } = await getTargetAst(
+  const { targetAst: testAst } = await getTargetAst(
     path.resolve(projectRoot, "src/services/test.ts"),
   );
   console.log("test.ts", testAst.program.body);
