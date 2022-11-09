@@ -22,7 +22,7 @@ async function getApiUrl() {
   return url;
 }
 
-async function loadWebView() {
+function loadWebView(onReceiveMessage: (message: ChannelData) => void) {
   const panel = vscode.window.createWebviewPanel(
     "SwaggerGen",
     "SwaggerGen",
@@ -33,10 +33,8 @@ async function loadWebView() {
     },
   );
   panel.webview.html = html;
-  panel.webview.onDidReceiveMessage((message: ChannelData) => {
-    console.log("webview => message", message);
-    panel.webview.postMessage({ msg: "success", success: true });
-  });
+  panel.webview.onDidReceiveMessage(onReceiveMessage);
+  return panel;
 }
 
 /**
@@ -46,6 +44,8 @@ async function loadWebView() {
  */
 export async function generateDefinitions() {
   try {
+    const openApiData = await getOpenApiData();
+    // mock Test
     const receiveData: ChannelData = {
       // servicePath: '/src/service/'
       routes: [
@@ -59,10 +59,21 @@ export async function generateDefinitions() {
         },
       ],
     };
-    const openApiData = await getOpenApiData();
-    await genDefinitions(receiveData.routes, openApiData);
-    await genServices(receiveData, openApiData);
-    // await loadWebView();
+
+    // await genDefinitions(receiveData.routes, openApiData);
+    // await genServices(receiveData, openApiData);
+    const onReceiveMessage = async (channelData: ChannelData) => {
+      console.log("webview => message", channelData);
+      try {
+        await genDefinitions(channelData.routes, openApiData);
+        await genServices(channelData, openApiData);
+      } catch (error) {
+        console.log("error", error);
+      }
+
+      panel.webview.postMessage({ msg: "success", success: true });
+    };
+    const panel = loadWebView(onReceiveMessage);
   } catch (error: any) {
     vscode.window.showErrorMessage(error.message);
   }
