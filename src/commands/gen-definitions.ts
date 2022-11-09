@@ -4,32 +4,10 @@ import openapiTS from "openapi-typescript";
 import * as vscode from "vscode";
 import { parse, print, types, prettyPrint } from "recast";
 import * as tsParser from "recast/parsers/typescript.js";
-import { writeDefinitionFile } from "../utils/genDefinition";
+import { genDefinitions, writeDefinitionFile } from "../utils/genDefinition";
 import html from "../webview/index.html";
-
-const axios = require("axios");
-
-type TsAst = import("@babel/types").File;
-
-async function fetchOpenApiJson() {
-  const openApiUrl = vscode.workspace
-    .getConfiguration("swagger-generate-ts")
-    .get("settingOpenApiJsonUrl");
-  console.log("openApiUrl", openApiUrl);
-  if (!openApiUrl) {
-    throw new Error("请在Setting中配置settingOpenApiJsonUrl");
-  }
-  try {
-    const res = await axios.get(openApiUrl);
-    const openApiJson = res.data;
-    if (!openApiJson.swagger) {
-      throw new Error("不是标准的openApiJson");
-    }
-    return openApiJson;
-  } catch (error: any) {
-    throw new Error(`get openApiJson failed: ${error.message}`);
-  }
-}
+import { genServices } from "../utils/genService";
+import { getOpenApiData } from "../utils/common";
 
 async function getApiUrl() {
   const url = await vscode.window.showInputBox({
@@ -42,16 +20,6 @@ async function getApiUrl() {
     throw new Error("请输入Swagger api 地址");
   }
   return url;
-}
-
-interface ChannelData {
-  // methods: string[];
-  // template: string;
-  servicePath: string;
-  routes: Array<{ method: string; url: string }>;
-
-  errorMessage?: string;
-  success?: boolean
 }
 
 async function loadWebView() {
@@ -78,17 +46,23 @@ async function loadWebView() {
  */
 export async function generateDefinitions() {
   try {
-    // const openApiJson = await fetchOpenApiJson();
-    // const swaggerVersion = Number(openApiJson.swagger);
-    // const tsSourceCode = await openapiTS(openApiJson, {
-    //   version: swaggerVersion,
-    // });
-    // const tsAst: TsAst = parse(tsSourceCode, {
-    //   parser: tsParser,
-    // });
-    // const apiUrl = await getApiUrl();
-    // await writeDefinitionFile(tsAst, apiUrl);
-    await loadWebView();
+    const receiveData: ChannelData = {
+      // servicePath: '/src/service/'
+      routes: [
+        {
+          url: "/admin/media/refluxCategory/queryChannelCategory",
+          method: "get",
+        },
+        {
+          url: "/admin/media/refluxCategory/addCategoryBinding",
+          method: "post",
+        },
+      ],
+    };
+    const openApiData = await getOpenApiData();
+    await genDefinitions(receiveData.routes, openApiData);
+    await genServices(receiveData, openApiData);
+    // await loadWebView();
   } catch (error: any) {
     vscode.window.showErrorMessage(error.message);
   }

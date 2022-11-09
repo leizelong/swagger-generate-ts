@@ -8,40 +8,20 @@ import type {
   TSPropertySignature,
   File as TsAst,
 } from "@babel/types";
+import openapiTS from "openapi-typescript";
+import {
+  fetchOpenApiJson,
+  getApiDefinitionKeys,
+  getDefinitionPathByUrl,
+  getExportNamedDeclaration,
+  getMethodOperationId,
+  getProjectRoot,
+  getTargetAst,
+  OpenApiData,
+  transformDefinitionKey,
+} from "./common";
 
-// type TsAst = import("@babel/types").File;
-
-type TargetNames = "paths" | "definitions" | "operations" | "external";
-
-function getExportNamedDeclaration(
-  ast: TsAst,
-  targetName: TargetNames,
-): TSInterfaceDeclaration {
-  for (const node of ast.program.body) {
-    if (
-      node.type === "ExportNamedDeclaration" &&
-      node?.declaration?.type === "TSInterfaceDeclaration"
-    ) {
-      const name = node.declaration.id.name;
-      if (targetName === name) {
-        return node.declaration;
-      }
-    }
-  }
-  throw new Error(`没有找到Declaration ${targetName}`);
-}
-
-/**
- *
- *
- * @param {string} url
- * @return {*}  addUsingPOST
- */
-function getControllerMethodByUrl(url: string) {
-  const parts = url.split("/");
-  const operationKey = parts[parts.length - 1];
-  return operationKey;
-}
+const axios = require("axios");
 
 function getControllerRouteByPathsDeclaration(
   declaration: ReturnType<typeof getExportNamedDeclaration>,
@@ -55,7 +35,7 @@ function getControllerRouteByPathsDeclaration(
       if (node.key.type === "StringLiteral") {
         route = node.key.value;
       }
-      // todo 通过method 相似性匹配，过滤不符合的画像
+      // todo 通过method 相似性匹配，过滤不符合的
       if (!route.includes(methodName)) {
         continue;
       }
@@ -87,88 +67,9 @@ function getControllerRouteByPathsDeclaration(
   throw new Error(`通过method获取路由失败: ${method}`);
 }
 
-function findOperationsDefinitionsKey(
-  node: TSPropertySignature,
-  paths: (string | number)[],
-) {
-  function findOneAnnotation(node: TSPropertySignature, name: string | number) {
-    if (node?.typeAnnotation?.typeAnnotation.type === "TSTypeLiteral") {
-      const members = node.typeAnnotation.typeAnnotation.members;
-      for (const member of members) {
-        if (member.type === "TSPropertySignature") {
-          if (member.key.type === "Identifier" && name === member.key.name) {
-            return member;
-          }
-
-          if (
-            member.key.type === "NumericLiteral" &&
-            name === member.key.value
-          ) {
-            return member;
-          }
-        }
-      }
-    }
-  }
-
-  let root: any = node;
-  for (const path of paths) {
-    root = findOneAnnotation(root, path);
-    if (!root) {
-      return;
-    }
-  }
-  const result = root === node ? undefined : root;
-  if (!result) {
-    return "";
-  }
-
-  function findDefinitionsKey(node: TSPropertySignature) {
-    const typeAnnotation = node?.typeAnnotation?.typeAnnotation;
-    if (
-      typeAnnotation?.type === "TSIndexedAccessType" &&
-      typeAnnotation.indexType.type === "TSLiteralType" &&
-      typeAnnotation.indexType.literal.type === "StringLiteral"
-    ) {
-      // DefinitionsKey
-      return typeAnnotation.indexType.literal.value;
-    }
-  }
-  const definitionsKey = findDefinitionsKey(result);
-  return definitionsKey;
-}
-
-function getApiDefinitionKeys(
-  operationsDeclaration: ReturnType<typeof getExportNamedDeclaration>,
-  method: string,
-) {
-  for (const node of operationsDeclaration.body.body) {
-    if (node.type === "TSPropertySignature") {
-      if (node.key.type === "Identifier") {
-        const { name } = node.key;
-        if (method === name) {
-          // todo hit; reqDto; resDto
-          const reqDtoKey = findOperationsDefinitionsKey(node, [
-            "parameters",
-            "body",
-            "request",
-          ]);
-          const resDtoKey = findOperationsDefinitionsKey(node, [
-            "responses",
-            200,
-            "schema",
-          ]);
-          return [reqDtoKey, resDtoKey].filter(item => !!item) as string[];
-        }
-      }
-    }
-  }
-  return [];
-}
-
 function getDefinitionsByKeys(
   definitionsDeclaration: ReturnType<typeof getExportNamedDeclaration>,
-  definitionKeys: string[],
+  definitionKeys: (string | undefined)[],
 ): TSPropertySignature[] {
   function findDefinitionByKey(
     definitionsDeclaration: ReturnType<typeof getExportNamedDeclaration>,
@@ -196,11 +97,14 @@ function getDefinitionsByKeys(
 
   let result: TSPropertySignature[] = [];
   for (const definitionKey of definitionKeys) {
-    const data = findDefinitionByKey(definitionsDeclaration, definitionKey);
-    data && result.push(data);
+    if (definitionKey) {
+      const data = findDefinitionByKey(definitionsDeclaration, definitionKey);
+      data && result.push(data);
+    }
   }
   return result;
 }
+
 /**
  * 1. 判断文件路径，有则读取，无则生成。获取到 targetAst
  * 2. builder Ast Node
@@ -212,36 +116,13 @@ function getDefinitionsByKeys(
  */
 async function writeDefinitions(
   definitionsDeclaration: ReturnType<typeof getExportNamedDeclaration>,
-  dirPath: string,
+  filePath: string,
   definitions: ReturnType<typeof getDefinitionsByKeys>,
 ) {
-  const fileName = "index.d.ts";
-
-  const filePath = path.resolve(dirPath, fileName);
-  let fileExist = false;
-
-  async function getTargetAst(): Promise<TsAst> {
-    let targetAst: TsAst = parse("");
-
-    try {
-      const fileStat = await fs.promises.stat(filePath);
-      if (fileStat.isFile()) {
-        fileExist = true;
-        const code = await fs.promises.readFile(filePath, {
-          encoding: "utf-8",
-        });
-        targetAst = parse(code, {
-          parser: tsParser,
-        });
-      }
-    } catch (error) {
-      console.log("getTargetAst-error", error);
-    }
-    return targetAst;
-  }
+  const dirPath = path.dirname(filePath);
 
   // step1. get targetAst
-  const targetAst = await getTargetAst();
+  const { targetAst, fileExist } = await getTargetAst(filePath);
 
   // step2. builderBody
 
@@ -256,10 +137,12 @@ async function writeDefinitions(
       tsArrayType,
     } = types.builders;
 
-    insertDefinitions(ast, definitions);
-
     // todo 递归寻找definitions
-    function recursiveDefinition(ast: TsAst, definition: TSPropertySignature) {
+    function recursiveDefinition(
+      ast: TsAst,
+      definition: TSPropertySignature,
+      definitionKeySet: Set<string>,
+    ) {
       if (definition?.typeAnnotation?.typeAnnotation.type === "TSTypeLiteral") {
         const interfaceName = getInterfaceName(definition);
         const members = definition.typeAnnotation.typeAnnotation.members;
@@ -283,6 +166,7 @@ async function writeDefinitions(
           ) {
             // todo search recursive insert into ast
             const definitionKey = memberValue.indexType.literal.value;
+
             const [innerDefinition] = getDefinitionsByKeys(
               definitionsDeclaration,
               [definitionKey],
@@ -302,9 +186,17 @@ async function writeDefinitions(
               },
             };
             body[idx] = item;
-
-            recursiveDefinition(ast, innerDefinition);
-            // todo insert action
+            if (!definitionKeySet.has(definitionKey)) {
+              /** 
+               *   
+    QueryChannelCategoryResponse
+  QueryChannelCategoryResponse: {
+    categories?: definitions["QueryChannelCategoryResponse"][];
+               *  避免这种情况
+               */
+              definitionKeySet.add(definitionKey);
+              recursiveDefinition(ast, innerDefinition, definitionKeySet);
+            }
           }
         }
         const tsDeclaration = tsInterfaceDeclaration(
@@ -331,8 +223,7 @@ async function writeDefinitions(
       if (!name) {
         throw new Error("获取InterfaceName失败");
       }
-      const replaceName = name.replace("«", "_").replace("»", "");
-      return replaceName;
+      return transformDefinitionKey(name);
     }
 
     function insertIntoAst(
@@ -358,10 +249,13 @@ async function writeDefinitions(
     }
 
     function insertDefinitions(ast: TsAst, definitions: TSPropertySignature[]) {
+      let definitionKeySet = new Set<string>();
+
       for (const definition of definitions) {
-        recursiveDefinition(ast, definition);
+        recursiveDefinition(ast, definition, definitionKeySet);
       }
     }
+    insertDefinitions(ast, definitions);
   }
   builderAstBody(targetAst);
 
@@ -375,49 +269,59 @@ async function writeDefinitions(
       }
     }
     const code = print(ast).code;
-    console.log("code", code);
+    // console.log("code", code);
     await fs.promises.writeFile(filePath, code, { encoding: "utf-8" });
   }
 
   await generateFile(dirPath, targetAst);
 }
 
-function getProjectRoot() {
-  if (!vscode.workspace.workspaceFolders?.length) {
-    return __dirname;
-  }
-  return vscode.workspace.workspaceFolders[0].uri.path;
-}
-
-function getDirPath(routePath: string) {
-  const baseDir = "definitions";
-  const projectRoot = getProjectRoot();
-  const dirPath = path.resolve(
-    projectRoot,
-    baseDir,
-    routePath.replace(/\/(.*)\/.*/, "$1"),
-  );
-  console.log("dirPath", dirPath);
-  return dirPath;
-}
-
-export async function writeDefinitionFile(tsAst: TsAst, apiUrl: string) {
+export async function writeDefinitionFile(
+  tsAst: TsAst,
+  operationId: string,
+  url: string,
+) {
   const pathsDeclaration = getExportNamedDeclaration(tsAst, "paths");
 
-  const controllerMethod = getControllerMethodByUrl(apiUrl);
+  // const controllerMethod = getControllerMethodByUrl(apiUrl);
   const controllerRoute = getControllerRouteByPathsDeclaration(
     pathsDeclaration,
-    controllerMethod,
+    operationId,
   );
 
   const operationsDeclaration = getExportNamedDeclaration(tsAst, "operations");
-  const dtoKeys = getApiDefinitionKeys(operationsDeclaration, controllerMethod);
+  const dtoKeys = getApiDefinitionKeys(operationsDeclaration, operationId);
   const definitionsDeclaration = getExportNamedDeclaration(
     tsAst,
     "definitions",
   );
   const definitions = getDefinitionsByKeys(definitionsDeclaration, dtoKeys);
-  const dirPath = getDirPath(controllerRoute);
 
-  await writeDefinitions(definitionsDeclaration, dirPath, definitions);
+  const filePath = getDefinitionPathByUrl(url);
+
+  await writeDefinitions(definitionsDeclaration, filePath, definitions);
+}
+
+export async function genDefinitions(
+  routes: ChannelData["routes"],
+  openApiData: OpenApiData,
+) {
+  const { openApiJson, openApiAst } = openApiData;
+
+  async function genDefinitionByRoute(route: ChannelData["routes"][0]) {
+    /**
+     * {
+          url: "/admin/media/refluxCategory/addCategoryBinding",
+          method: "post",
+        }
+     */
+    const { method, url } = route;
+    const operationId = getMethodOperationId(openApiJson, url, method);
+    await writeDefinitionFile(openApiAst, operationId, url);
+    // console.log("methodEntry", methodEntry);
+  }
+
+  for (const route of routes) {
+    await genDefinitionByRoute(route);
+  }
 }
