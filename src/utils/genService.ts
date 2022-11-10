@@ -4,7 +4,7 @@
 import * as path from "path";
 import * as fs from "fs";
 
-import { parse, print, types, prettyPrint } from "recast";
+import { print, types, prettyPrint } from "recast";
 import {
   TSInterfaceDeclaration,
   File as TsAst,
@@ -23,27 +23,32 @@ import {
 } from "./common";
 import { namedTypes } from "ast-types";
 
-// 初始化 import { post, get } from '@/utils/request';
-function initServiceAst(ast: TsAst) {
+/**
+ * 初始化 import { post, get } from '@/utils/request';
+ */
+function initAstRequestImport(ast: TsAst, method: Methods) {
   const { identifier, importDeclaration, importSpecifier, stringLiteral } =
     types.builders;
-  // todo 动态改变
-  const methods: Methods[] = ["get", "post"];
-  const specifiers = methods.map(method => importSpecifier(identifier(method)));
-  const requestDeclaration = importDeclaration(
-    specifiers,
-    stringLiteral("@/utils/request"),
-  );
-  ast.program.body.push(requestDeclaration as any);
+  const requestImportPath = "@/utils/request";
+  const { targetImportNode } = getImportNodes(ast, requestImportPath);
+
+  if (targetImportNode) {
+    const specifierKeys = getSpecifierKeys(targetImportNode);
+    if (!specifierKeys.includes(method)) {
+      const methodSpecifier = importSpecifier(identifier(method));
+      targetImportNode.specifiers.push(methodSpecifier as any);
+    }
+  } else {
+    const specifiers = [importSpecifier(identifier(method))];
+    const requestDeclaration = importDeclaration(
+      specifiers,
+      stringLiteral(requestImportPath),
+    );
+    ast.program.body.push(requestDeclaration as any);
+  }
 }
 
-function addDefinitionImportDeclaration(
-  ast: TsAst,
-  importPath: string,
-  definitionKeys: string[],
-) {
-  const { identifier, importDeclaration, importSpecifier, stringLiteral } =
-    types.builders;
+function getImportNodes(ast: TsAst, importPath?: string) {
   const body = ast.program.body;
   const importNodes: ImportDeclaration[] = [];
   let lastImportNodeIdx = 0;
@@ -54,13 +59,39 @@ function addDefinitionImportDeclaration(
       importNodes.push(node);
       lastImportNodeIdx = index;
       const nodeSource = node.source.value;
-      if (nodeSource === importPath) {
+      if (importPath && nodeSource === importPath) {
         targetImportNode = node;
       }
     } else if (node.type === "ExportNamedDeclaration") {
       break;
     }
   }
+  return { importNodes, lastImportNodeIdx, targetImportNode };
+}
+
+function getSpecifierKeys(importNode: ImportDeclaration) {
+  const specifierKeys = importNode.specifiers
+    .map(item => {
+      if (namedTypes.ImportSpecifier.assert(item)) {
+        return item.imported.name;
+      }
+    })
+    .filter(item => !!item);
+  return specifierKeys;
+}
+
+function addDefinitionImportDeclaration(
+  ast: TsAst,
+  importPath: string,
+  definitionKeys: string[],
+) {
+  const { identifier, importDeclaration, importSpecifier, stringLiteral } =
+    types.builders;
+
+  const { lastImportNodeIdx, targetImportNode } = getImportNodes(
+    ast,
+    importPath,
+  );
 
   if (!targetImportNode) {
     // 构造 ImportDeclaration
@@ -78,13 +109,7 @@ function addDefinitionImportDeclaration(
       dtoImportDeclaration as any,
     );
   } else {
-    const specifierKeys = targetImportNode.specifiers
-      .map(item => {
-        if (namedTypes.ImportSpecifier.assert(item)) {
-          return item.imported.name;
-        }
-      })
-      .filter(item => !!item);
+    const specifierKeys = getSpecifierKeys(targetImportNode);
     for (const definitionKey of definitionKeys) {
       if (definitionKey && !specifierKeys.includes(definitionKey)) {
         targetImportNode.specifiers.push(
@@ -206,10 +231,8 @@ async function genService(
   const serviceFilePath = servicePath || getServicePathByUrl(route.url);
   const { targetAst, fileExist } = await getTargetAst(serviceFilePath);
 
-  if (!fileExist) {
-    // todo 判断有无importDecarlation
-    initServiceAst(targetAst);
-  }
+  initAstRequestImport(targetAst, method);
+
   insertMethod(targetAst, url, method, operationsDeclaration, openApiJson);
 
   await generateFileByAst(targetAst, serviceFilePath);

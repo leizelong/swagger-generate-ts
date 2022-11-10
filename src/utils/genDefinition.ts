@@ -1,71 +1,16 @@
 import * as fs from "fs";
-import * as tsParser from "recast/parsers/typescript.js";
-import { parse, print, types, prettyPrint } from "recast";
+import { print, types, prettyPrint } from "recast";
 import * as path from "path";
-import * as vscode from "vscode";
-import type {
-  TSInterfaceDeclaration,
-  TSPropertySignature,
-  File as TsAst,
-} from "@babel/types";
-import openapiTS from "openapi-typescript";
+import type { TSPropertySignature, File as TsAst } from "@babel/types";
 import {
-  fetchOpenApiJson,
   getApiDefinitionKeys,
   getDefinitionPathByUrl,
   getExportNamedDeclaration,
   getMethodOperationId,
-  getProjectRoot,
   getTargetAst,
   OpenApiData,
   transformDefinitionKey,
 } from "./common";
-
-const axios = require("axios");
-
-function getControllerRouteByPathsDeclaration(
-  declaration: ReturnType<typeof getExportNamedDeclaration>,
-  method: string,
-) {
-  const methodName = method.replace(/(.*)Using.*/, "$1");
-
-  for (const node of declaration?.body?.body) {
-    if (node.type === "TSPropertySignature") {
-      let route: string = "";
-      if (node.key.type === "StringLiteral") {
-        route = node.key.value;
-      }
-      // todo 通过method 相似性匹配，过滤不符合的
-      if (!route.includes(methodName)) {
-        continue;
-      }
-      if (node?.typeAnnotation?.typeAnnotation.type === "TSTypeLiteral") {
-        const members = node.typeAnnotation.typeAnnotation.members;
-
-        for (const member of members) {
-          if (
-            member?.typeAnnotation?.typeAnnotation.type ===
-            "TSIndexedAccessType"
-          ) {
-            const indexType = member?.typeAnnotation?.typeAnnotation.indexType;
-            if (
-              indexType.type === "TSLiteralType" &&
-              indexType.literal.type === "StringLiteral"
-            ) {
-              const { value: operationKey } = indexType.literal;
-              if (method === operationKey) {
-                // todo hit it
-                return route;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  throw new Error(`通过method获取路由失败: ${method}`);
-}
 
 function getDefinitionsByKeys(
   definitionsDeclaration: ReturnType<typeof getExportNamedDeclaration>,
@@ -269,7 +214,6 @@ async function writeDefinitions(
       }
     }
     const code = print(ast).code;
-    // console.log("code", code);
     await fs.promises.writeFile(filePath, code, { encoding: "utf-8" });
   }
 
@@ -281,13 +225,6 @@ export async function writeDefinitionFile(
   operationId: string,
   url: string,
 ) {
-  const pathsDeclaration = getExportNamedDeclaration(tsAst, "paths");
-
-  // const controllerMethod = getControllerMethodByUrl(apiUrl);
-  const controllerRoute = getControllerRouteByPathsDeclaration(
-    pathsDeclaration,
-    operationId,
-  );
 
   const operationsDeclaration = getExportNamedDeclaration(tsAst, "operations");
   const dtoKeys = getApiDefinitionKeys(operationsDeclaration, operationId);
