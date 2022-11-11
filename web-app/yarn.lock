@@ -15,6 +15,40 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@ant-design/colors@^6.0.0":
+  version "6.0.0"
+  resolved "http://npm.xyb2b.com.cn/@ant-design%2fcolors/-/colors-6.0.0.tgz#9b9366257cffcc47db42b9d0203bb592c13c0298"
+  integrity sha512-qAZRvPzfdWHtfameEGP2Qvuf838NhergR35o+EuVyB5XvSA98xod5r4utvi4TJ3ywmevm290g9nsCG5MryrdWQ==
+  dependencies:
+    "@ctrl/tinycolor" "^3.4.0"
+
+"@ant-design/icons-svg@^4.2.1":
+  version "4.2.1"
+  resolved "http://npm.xyb2b.com.cn/@ant-design%2ficons-svg/-/icons-svg-4.2.1.tgz#8630da8eb4471a4aabdaed7d1ff6a97dcb2cf05a"
+  integrity sha1-hjDajrRHGkqr2u19H/apfcss8Fo=
+
+"@ant-design/icons@^4.7.0":
+  version "4.7.0"
+  resolved "http://npm.xyb2b.com.cn/@ant-design%2ficons/-/icons-4.7.0.tgz#8c3cbe0a556ba92af5dc7d1e70c0b25b5179af0f"
+  integrity sha1-jDy+ClVrqSr13H0ecMCyW1F5rw8=
+  dependencies:
+    "@ant-design/colors" "^6.0.0"
+    "@ant-design/icons-svg" "^4.2.1"
+    "@babel/runtime" "^7.11.2"
+    classnames "^2.2.6"
+    rc-util "^5.9.4"
+
+"@ant-design/react-slick@~0.29.1":
+  version "0.29.2"
+  resolved "http://npm.xyb2b.com.cn/@ant-design%2freact-slick/-/react-slick-0.29.2.tgz#53e6a7920ea3562eebb304c15a7fc2d7e619d29c"
+  integrity sha512-kgjtKmkGHa19FW21lHnAfyyH9AAoh35pBdcJ53rHmQ3O+cfFHGHnUbj/HFrRNJ5vIts09FKJVAD8RpaC+RaWfA==
+  dependencies:
+    "@babel/runtime" "^7.10.4"
+    classnames "^2.2.5"
+    json2mq "^0.2.0"
+    lodash "^4.17.21"
+    resize-observer-polyfill "^1.5.1"
+
 "@apideck/better-ajv-errors@^0.3.1":
   version "0.3.6"
   resolved "http://npm.xyb2b.com.cn/@apideck%2fbetter-ajv-errors/-/better-ajv-errors-0.3.6.tgz#957d4c28e886a64a8141f7522783be65733ff097"
@@ -1033,7 +1067,7 @@
     core-js-pure "^3.25.1"
     regenerator-runtime "^0.13.10"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.3", "@babel/runtime@^7.18.9", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.10.1", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.4", "@babel/runtime@^7.11.1", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.3", "@babel/runtime@^7.16.7", "@babel/runtime@^7.18.0", "@babel/runtime@^7.18.3", "@babel/runtime@^7.18.9", "@babel/runtime@^7.20.0", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   version "7.20.1"
   resolved "http://npm.xyb2b.com.cn/@babel%2fruntime/-/runtime-7.20.1.tgz#1148bb33ab252b165a06698fde7576092a78b4a9"
   integrity sha512-mrzLkl6U9YLF8qpqI7TB82PESyEGjm/0Ly91jG575eVxMMlb8fYfOXFZIJ8XfLrJZQbm7dlKry2bJmXBUEkdFg==
@@ -1189,6 +1223,11 @@
   version "2.0.2"
   resolved "http://npm.xyb2b.com.cn/@csstools%2fselector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
+
+"@ctrl/tinycolor@^3.4.0":
+  version "3.4.1"
+  resolved "http://npm.xyb2b.com.cn/@ctrl%2ftinycolor/-/tinycolor-3.4.1.tgz#75b4c27948c81e88ccd3a8902047bcd797f38d32"
+  integrity sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==
 
 "@eslint/eslintrc@^1.3.3":
   version "1.3.3"
@@ -1571,6 +1610,15 @@
     loader-utils "^2.0.3"
     schema-utils "^3.0.0"
     source-map "^0.7.3"
+
+"@rc-component/portal@^1.0.0-6", "@rc-component/portal@^1.0.0-8":
+  version "1.0.3"
+  resolved "http://npm.xyb2b.com.cn/@rc-component%2fportal/-/portal-1.0.3.tgz#3aa2c229a7a20ac2412d864e8977e6377973416e"
+  integrity sha512-rG9j7OMiI9eLFLF6G0B4OcfLac9W8Z7Vjeizbjt/A6R+zzw7vhHbJ4GIkrDpUqXDvFdEEzdxfICpb8/noLwG+w==
+  dependencies:
+    "@babel/runtime" "^7.18.0"
+    classnames "^2.3.2"
+    rc-util "^5.24.4"
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -2507,6 +2555,55 @@ ansi-styles@^5.0.0:
   resolved "http://npm.xyb2b.com.cn/ansi-styles/-/ansi-styles-5.2.0.tgz#07449690ad45777d1924ac2abb2fc8895dba836b"
   integrity sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==
 
+antd@^4.24.1:
+  version "4.24.1"
+  resolved "http://npm.xyb2b.com.cn/antd/-/antd-4.24.1.tgz#c002a150fc3f828146f8b0df11ccc1210a824c61"
+  integrity sha512-YzHOODx3kbgUKQ7FouuukkkWzLGnbAjIxN6VShOnzOiRWe8EHo7wXyM8De0cASjw/8+SmrqyyK0np+ohQ7WntQ==
+  dependencies:
+    "@ant-design/colors" "^6.0.0"
+    "@ant-design/icons" "^4.7.0"
+    "@ant-design/react-slick" "~0.29.1"
+    "@babel/runtime" "^7.18.3"
+    "@ctrl/tinycolor" "^3.4.0"
+    classnames "^2.2.6"
+    copy-to-clipboard "^3.2.0"
+    lodash "^4.17.21"
+    moment "^2.29.2"
+    rc-cascader "~3.7.0"
+    rc-checkbox "~2.3.0"
+    rc-collapse "~3.4.2"
+    rc-dialog "~9.0.2"
+    rc-drawer "~6.0.0"
+    rc-dropdown "~4.0.0"
+    rc-field-form "~1.27.0"
+    rc-image "~5.9.0"
+    rc-input "~0.1.4"
+    rc-input-number "~7.3.9"
+    rc-mentions "~1.10.0"
+    rc-menu "~9.6.3"
+    rc-motion "^2.6.1"
+    rc-notification "~4.6.0"
+    rc-pagination "~3.1.17"
+    rc-picker "~2.6.11"
+    rc-progress "~3.4.1"
+    rc-rate "~2.9.0"
+    rc-resize-observer "^1.2.0"
+    rc-segmented "~2.1.0"
+    rc-select "~14.1.13"
+    rc-slider "~10.0.0"
+    rc-steps "~5.0.0-alpha.2"
+    rc-switch "~3.2.0"
+    rc-table "~7.26.0"
+    rc-tabs "~12.2.0"
+    rc-textarea "~0.4.5"
+    rc-tooltip "~5.2.0"
+    rc-tree "~5.7.0"
+    rc-tree-select "~5.5.0"
+    rc-trigger "^5.2.10"
+    rc-upload "~4.3.0"
+    rc-util "^5.22.5"
+    scroll-into-view-if-needed "^2.2.25"
+
 anymatch@^3.0.3, anymatch@~3.1.2:
   version "3.1.2"
   resolved "http://npm.xyb2b.com.cn/anymatch/-/anymatch-3.1.2.tgz#c0557c096af32f106198f4f4e2a383537e378716"
@@ -2568,6 +2665,11 @@ array-includes@^3.1.4, array-includes@^3.1.5:
     get-intrinsic "^1.1.3"
     is-string "^1.0.7"
 
+array-tree-filter@^2.1.0:
+  version "2.1.0"
+  resolved "http://npm.xyb2b.com.cn/array-tree-filter/-/array-tree-filter-2.1.0.tgz#873ac00fec83749f255ac8dd083814b4f6329190"
+  integrity sha512-4ROwICNlNw/Hqa9v+rk5h22KjmzB1JGTMVKP2AKJBOCgb0yL0ASf0+YvCcLNNwquOHNX48jkeZIJ3a+oOQqKcw==
+
 array-union@^2.1.0:
   version "2.1.0"
   resolved "http://npm.xyb2b.com.cn/array-union/-/array-union-2.1.0.tgz#b798420adbeb1de828d84acd8a2e23d3efe85e8d"
@@ -2613,6 +2715,11 @@ ast-types-flow@^0.0.7:
   version "0.0.7"
   resolved "http://npm.xyb2b.com.cn/ast-types-flow/-/ast-types-flow-0.0.7.tgz#f70b735c6bca1a5c9c22d982c3e39e7feba3bdad"
   integrity sha1-9wtzXGvKGlycItmCw+Oef+ujva0=
+
+async-validator@^4.1.0:
+  version "4.2.5"
+  resolved "http://npm.xyb2b.com.cn/async-validator/-/async-validator-4.2.5.tgz#c96ea3332a521699d0afaaceed510a54656c6339"
+  integrity sha512-7HhHjtERjqlNbZtqNqy2rckN/SpOOlmDliet+lP7k+eKZEjPk3DgyeU9lIXLdeLz0uBbbVp+9Qdow9wJWgwwfg==
 
 async@^3.2.3:
   version "3.2.4"
@@ -3050,6 +3157,11 @@ cjs-module-lexer@^1.0.0:
   resolved "http://npm.xyb2b.com.cn/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz#9f84ba3244a512f3a54e5277e8eef4c489864e40"
   integrity sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==
 
+classnames@2.x, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6, classnames@^2.3.1, classnames@^2.3.2:
+  version "2.3.2"
+  resolved "http://npm.xyb2b.com.cn/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
+  integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
+
 clean-css@^5.2.2:
   version "5.3.1"
   resolved "http://npm.xyb2b.com.cn/clean-css/-/clean-css-5.3.1.tgz#d0610b0b90d125196a2894d35366f734e5d7aa32"
@@ -3176,6 +3288,11 @@ compression@^1.7.4:
     safe-buffer "5.1.2"
     vary "~1.1.2"
 
+compute-scroll-into-view@^1.0.17:
+  version "1.0.17"
+  resolved "http://npm.xyb2b.com.cn/compute-scroll-into-view/-/compute-scroll-into-view-1.0.17.tgz#6a88f18acd9d42e9cf4baa6bec7e0522607ab7ab"
+  integrity sha1-aojxis2dQunPS6pr7H4FImB6t6s=
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "http://npm.xyb2b.com.cn/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -3217,6 +3334,13 @@ cookie@0.5.0:
   version "0.5.0"
   resolved "http://npm.xyb2b.com.cn/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
   integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
+
+copy-to-clipboard@^3.2.0:
+  version "3.3.2"
+  resolved "http://npm.xyb2b.com.cn/copy-to-clipboard/-/copy-to-clipboard-3.3.2.tgz#5b263ec2366224b100181dded7ce0579b340c107"
+  integrity sha512-Vme1Z6RUDzrb6xAI7EZlVZ5uvOk2F//GaxKUxajDqm9LhOVM1inxNAD2vy+UZDYsd0uyA9s7b3/FVZPSxqrCfg==
+  dependencies:
+    toggle-selection "^1.0.6"
 
 core-js-compat@^3.25.1:
   version "3.26.0"
@@ -3485,6 +3609,16 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
+date-fns@2.x:
+  version "2.29.3"
+  resolved "http://npm.xyb2b.com.cn/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
+
+dayjs@1.x:
+  version "1.11.6"
+  resolved "http://npm.xyb2b.com.cn/dayjs/-/dayjs-1.11.6.tgz#2e79a226314ec3ec904e3ee1dd5a4f5e5b1c7afb"
+  integrity sha512-zZbY5giJAinCG+7AGaw0wIhNZ6J8AhWuSXKvuc1KAyMiRsvGQWqh4L+MomvhdAYjN+lqvVCMq1I41e3YHvXkyQ==
+
 debug@2.6.9, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
   resolved "http://npm.xyb2b.com.cn/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
@@ -3676,6 +3810,11 @@ dom-accessibility-api@^0.5.6, dom-accessibility-api@^0.5.9:
   version "0.5.14"
   resolved "http://npm.xyb2b.com.cn/dom-accessibility-api/-/dom-accessibility-api-0.5.14.tgz#56082f71b1dc7aac69d83c4285eef39c15d93f56"
   integrity sha512-NMt+m9zFMPZe0JcY9gN224Qvk6qLIdqex29clBvc/y75ZBX9YA9wNK3frsYvu2DI1xcCIwxwnX+TlsJ2DSOADg==
+
+dom-align@^1.7.0:
+  version "1.12.3"
+  resolved "http://npm.xyb2b.com.cn/dom-align/-/dom-align-1.12.3.tgz#a36d02531dae0eefa2abb0c4db6595250526f103"
+  integrity sha512-Gj9hZN3a07cbR6zviMUBOMPdWxYhbMI+x+WS0NAIu2zFZmbK8ys9R79g+iG9qLnlCwpFoaB+fKy8Pdv470GsPA==
 
 dom-converter@^0.2.0:
   version "0.2.0"
@@ -5899,6 +6038,13 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "http://npm.xyb2b.com.cn/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha1-nbe1lJatPzz+8wp1FC0tkwrXJlE=
 
+json2mq@^0.2.0:
+  version "0.2.0"
+  resolved "http://npm.xyb2b.com.cn/json2mq/-/json2mq-0.2.0.tgz#b637bd3ba9eabe122c83e9720483aeb10d2c904a"
+  integrity sha1-tje9O6nqvhIsg+lyBIOusQ0skEo=
+  dependencies:
+    string-convert "^0.2.0"
+
 json5@^1.0.1:
   version "1.0.1"
   resolved "http://npm.xyb2b.com.cn/json5/-/json5-1.0.1.tgz#779fb0018604fa854eacbf6252180d83543e3dbe"
@@ -6223,6 +6369,11 @@ mkdirp@~0.5.1:
   integrity sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==
   dependencies:
     minimist "^1.2.6"
+
+moment@^2.24.0, moment@^2.29.2:
+  version "2.29.4"
+  resolved "http://npm.xyb2b.com.cn/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 ms@2.0.0:
   version "2.0.0"
@@ -7359,6 +7510,378 @@ raw-body@2.5.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+rc-align@^4.0.0:
+  version "4.0.12"
+  resolved "http://npm.xyb2b.com.cn/rc-align/-/rc-align-4.0.12.tgz#065b5c68a1cc92a00800c9239320d9fdf5f16207"
+  integrity sha512-3DuwSJp8iC/dgHzwreOQl52soj40LchlfUHtgACOUtwGuoFIOVh6n/sCpfqCU8kO5+iz6qR0YKvjgB8iPdE3aQ==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "2.x"
+    dom-align "^1.7.0"
+    lodash "^4.17.21"
+    rc-util "^5.3.0"
+    resize-observer-polyfill "^1.5.1"
+
+rc-cascader@~3.7.0:
+  version "3.7.0"
+  resolved "http://npm.xyb2b.com.cn/rc-cascader/-/rc-cascader-3.7.0.tgz#98134df578ce1cca22be8fb4319b04df4f3dca36"
+  integrity sha512-SFtGpwmYN7RaWEAGTS4Rkc62ZV/qmQGg/tajr/7mfIkleuu8ro9Hlk6J+aA0x1YS4zlaZBtTcSaXM01QMiEV/A==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    array-tree-filter "^2.1.0"
+    classnames "^2.3.1"
+    rc-select "~14.1.0"
+    rc-tree "~5.7.0"
+    rc-util "^5.6.1"
+
+rc-checkbox@~2.3.0:
+  version "2.3.2"
+  resolved "http://npm.xyb2b.com.cn/rc-checkbox/-/rc-checkbox-2.3.2.tgz#f91b3678c7edb2baa8121c9483c664fa6f0aefc1"
+  integrity sha512-afVi1FYiGv1U0JlpNH/UaEXdh6WUJjcWokj/nUN2TgG80bfG+MDdbfHKlLcNNba94mbjy2/SXJ1HDgrOkXGAjg==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.1"
+
+rc-collapse@~3.4.2:
+  version "3.4.2"
+  resolved "http://npm.xyb2b.com.cn/rc-collapse/-/rc-collapse-3.4.2.tgz#1310be7ad4cd0dcfc622c45f6c3b5ffdee403ad7"
+  integrity sha512-jpTwLgJzkhAgp2Wpi3xmbTbbYExg6fkptL67Uu5LCRVEj6wqmy0DHTjjeynsjOLsppHGHu41t1ELntZ0lEvS/Q==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "2.x"
+    rc-motion "^2.3.4"
+    rc-util "^5.2.1"
+    shallowequal "^1.1.0"
+
+rc-dialog@~9.0.0, rc-dialog@~9.0.2:
+  version "9.0.2"
+  resolved "http://npm.xyb2b.com.cn/rc-dialog/-/rc-dialog-9.0.2.tgz#aadfebdeba145f256c1fac9b9f509f893cdbb5b8"
+  integrity sha512-s3U+24xWUuB6Bn2Lk/Qt6rufy+uT+QvWkiFhNBcO9APLxcFFczWamaq7x9h8SCuhfc1nHcW4y8NbMsnAjNnWyg==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    "@rc-component/portal" "^1.0.0-8"
+    classnames "^2.2.6"
+    rc-motion "^2.3.0"
+    rc-util "^5.21.0"
+
+rc-drawer@~6.0.0:
+  version "6.0.0"
+  resolved "http://npm.xyb2b.com.cn/rc-drawer/-/rc-drawer-6.0.0.tgz#1cbb5743d3eb672ea33ced4979b055baf30f59c9"
+  integrity sha512-4k/g1q+yfATY9fgPB7ec+OTj51NF3BW/HzESkGtZNQZurMJr/uAHe0T4nsQ5Xd1ESR0MlS6lbQn4iB+L4sZFOg==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    "@rc-component/portal" "^1.0.0-6"
+    classnames "^2.2.6"
+    rc-motion "^2.6.1"
+    rc-util "^5.21.2"
+
+rc-dropdown@~4.0.0:
+  version "4.0.1"
+  resolved "http://npm.xyb2b.com.cn/rc-dropdown/-/rc-dropdown-4.0.1.tgz#f65d9d3d89750241057db59d5a75e43cd4576b68"
+  integrity sha512-OdpXuOcme1rm45cR0Jzgfl1otzmU4vuBVb+etXM8vcaULGokAKVpKlw8p6xzspG7jGd/XxShvq+N3VNEfk/l5g==
+  dependencies:
+    "@babel/runtime" "^7.18.3"
+    classnames "^2.2.6"
+    rc-trigger "^5.3.1"
+    rc-util "^5.17.0"
+
+rc-field-form@~1.27.0:
+  version "1.27.3"
+  resolved "http://npm.xyb2b.com.cn/rc-field-form/-/rc-field-form-1.27.3.tgz#e5262796b91c80848a42a3e7a669bf459f08d63d"
+  integrity sha512-HGqxHnmGQgkPApEcikV4qTg3BLPC82uB/cwBDftDt1pYaqitJfSl5TFTTUMKVEJVT5RqJ2Zi68ME1HmIMX2HAw==
+  dependencies:
+    "@babel/runtime" "^7.18.0"
+    async-validator "^4.1.0"
+    rc-util "^5.8.0"
+
+rc-image@~5.9.0:
+  version "5.9.0"
+  resolved "http://npm.xyb2b.com.cn/rc-image/-/rc-image-5.9.0.tgz#74e5976dee2aebacce80805b3d8a67fbd042a1f8"
+  integrity sha512-qyHXhIc7eotsX8HLm0bRaSO5J4Lb2wE/FafFQMJ+SnMtRQy1uKjEwOJ8UADHyyyfikd4WtT4fghN6JxiVCYslA==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+    classnames "^2.2.6"
+    rc-dialog "~9.0.0"
+    rc-util "^5.0.6"
+
+rc-input-number@~7.3.9:
+  version "7.3.9"
+  resolved "http://npm.xyb2b.com.cn/rc-input-number/-/rc-input-number-7.3.9.tgz#bc6560376ea595e3bf8fbd3137711cbc158800b5"
+  integrity sha512-u0+miS+SATdb6DtssYei2JJ1WuZME+nXaG6XGtR8maNyW5uGDytfDu60OTWLQEb0Anv/AcCzehldV8CKmKyQfA==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.5"
+    rc-util "^5.23.0"
+
+rc-input@~0.1.4:
+  version "0.1.4"
+  resolved "http://npm.xyb2b.com.cn/rc-input/-/rc-input-0.1.4.tgz#45cb4ba209ae6cc835a2acb8629d4f8f0cb347e0"
+  integrity sha512-FqDdNz+fV2dKNgfXzcSLKvC+jEs1709t7nD+WdfjrdSaOcefpgc7BUJYadc3usaING+b7ediMTfKxuJBsEFbXA==
+  dependencies:
+    "@babel/runtime" "^7.11.1"
+    classnames "^2.2.1"
+    rc-util "^5.18.1"
+
+rc-mentions@~1.10.0:
+  version "1.10.0"
+  resolved "http://npm.xyb2b.com.cn/rc-mentions/-/rc-mentions-1.10.0.tgz#f2e4055b535d042d408e94b853b709dbd966f546"
+  integrity sha512-oMlYWnwXSxP2NQVlgxOTzuG/u9BUc3ySY78K3/t7MNhJWpZzXTao+/Bic6tyZLuNCO89//hVQJBdaR2rnFQl6Q==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.6"
+    rc-menu "~9.6.0"
+    rc-textarea "^0.4.0"
+    rc-trigger "^5.0.4"
+    rc-util "^5.22.5"
+
+rc-menu@~9.6.0, rc-menu@~9.6.3:
+  version "9.6.4"
+  resolved "http://npm.xyb2b.com.cn/rc-menu/-/rc-menu-9.6.4.tgz#033e7b8848c17a09a81b68b8d4c3fa457605f4f6"
+  integrity sha512-6DiNAjxjVIPLZXHffXxxcyE15d4isRL7iQ1ru4MqYDH2Cqc5bW96wZOdMydFtGLyDdnmEQ9jVvdCE9yliGvzkw==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "2.x"
+    rc-motion "^2.4.3"
+    rc-overflow "^1.2.0"
+    rc-trigger "^5.1.2"
+    rc-util "^5.12.0"
+    shallowequal "^1.1.0"
+
+rc-motion@^2.0.0, rc-motion@^2.0.1, rc-motion@^2.2.0, rc-motion@^2.3.0, rc-motion@^2.3.4, rc-motion@^2.4.3, rc-motion@^2.4.4, rc-motion@^2.6.1, rc-motion@^2.6.2:
+  version "2.6.2"
+  resolved "http://npm.xyb2b.com.cn/rc-motion/-/rc-motion-2.6.2.tgz#3d31f97e41fb8e4f91a4a4189b6a98ac63342869"
+  integrity sha512-4w1FaX3dtV749P8GwfS4fYnFG4Rb9pxvCYPc/b2fw1cmlHJWNNgOFIz7ysiD+eOrzJSvnLJWlNQQncpNMXwwpg==
+  dependencies:
+    "@babel/runtime" "^7.11.1"
+    classnames "^2.2.1"
+    rc-util "^5.21.0"
+
+rc-notification@~4.6.0:
+  version "4.6.1"
+  resolved "http://npm.xyb2b.com.cn/rc-notification/-/rc-notification-4.6.1.tgz#068e8674f4bd7926a447eca512915d4b41b15c91"
+  integrity sha512-NSmFYwrrdY3+un1GvDAJQw62Xi9LNMSsoQyo95tuaYrcad5Bn9gJUL8AREufRxSQAQnr64u3LtP3EUyLYT6bhw==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "2.x"
+    rc-motion "^2.2.0"
+    rc-util "^5.20.1"
+
+rc-overflow@^1.0.0, rc-overflow@^1.2.0:
+  version "1.2.8"
+  resolved "http://npm.xyb2b.com.cn/rc-overflow/-/rc-overflow-1.2.8.tgz#40f140fabc244118543e627cdd1ef750d9481a88"
+  integrity sha512-QJ0UItckWPQ37ZL1dMEBAdY1dhfTXFL9k6oTTcyydVwoUNMnMqCGqnRNA98axSr/OeDKqR6DVFyi8eA5RQI/uQ==
+  dependencies:
+    "@babel/runtime" "^7.11.1"
+    classnames "^2.2.1"
+    rc-resize-observer "^1.0.0"
+    rc-util "^5.19.2"
+
+rc-pagination@~3.1.17:
+  version "3.1.17"
+  resolved "http://npm.xyb2b.com.cn/rc-pagination/-/rc-pagination-3.1.17.tgz#91e690aa894806e344cea88ea4a16d244194a1bd"
+  integrity sha512-/BQ5UxcBnW28vFAcP2hfh+Xg15W0QZn8TWYwdCApchMH1H0CxiaUUcULP8uXcFM1TygcdKWdt3JqsL9cTAfdkQ==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.1"
+
+rc-picker@~2.6.11:
+  version "2.6.11"
+  resolved "http://npm.xyb2b.com.cn/rc-picker/-/rc-picker-2.6.11.tgz#d4a55e46480517cd1bfea5f5acd28b1d6be232d2"
+  integrity sha512-INJ7ULu+Kj4UgqbcqE8Q+QpMw55xFf9kkyLBHJFk0ihjJpAV4glialRfqHE7k4KX2BWYPQfpILwhwR14x2EiRQ==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.1"
+    date-fns "2.x"
+    dayjs "1.x"
+    moment "^2.24.0"
+    rc-trigger "^5.0.4"
+    rc-util "^5.4.0"
+    shallowequal "^1.1.0"
+
+rc-progress@~3.4.1:
+  version "3.4.1"
+  resolved "http://npm.xyb2b.com.cn/rc-progress/-/rc-progress-3.4.1.tgz#a9ffe099e88a4fc03afb09d8603162bf0760d743"
+  integrity sha512-eAFDHXlk8aWpoXl0llrenPMt9qKHQXphxcVsnKs0FHC6eCSk1ebJtyaVjJUzKe0233ogiLDeEFK1Uihz3s67hw==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.6"
+    rc-util "^5.16.1"
+
+rc-rate@~2.9.0:
+  version "2.9.2"
+  resolved "http://npm.xyb2b.com.cn/rc-rate/-/rc-rate-2.9.2.tgz#4a58965d1ecf91896ebae01d458b59056df0b4ea"
+  integrity sha512-SaiZFyN8pe0Fgphv8t3+kidlej+cq/EALkAJAc3A0w0XcPaH2L1aggM8bhe1u6GAGuQNAoFvTLjw4qLPGRKV5g==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.5"
+    rc-util "^5.0.1"
+
+rc-resize-observer@^1.0.0, rc-resize-observer@^1.1.0, rc-resize-observer@^1.2.0:
+  version "1.2.0"
+  resolved "http://npm.xyb2b.com.cn/rc-resize-observer/-/rc-resize-observer-1.2.0.tgz#9f46052f81cdf03498be35144cb7c53fd282c4c7"
+  integrity sha512-6W+UzT3PyDM0wVCEHfoW3qTHPTvbdSgiA43buiy8PzmeMnfgnDeb9NjdimMXMl3/TcrvvWl5RRVdp+NqcR47pQ==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.1"
+    rc-util "^5.15.0"
+    resize-observer-polyfill "^1.5.1"
+
+rc-segmented@~2.1.0:
+  version "2.1.0"
+  resolved "http://npm.xyb2b.com.cn/rc-segmented/-/rc-segmented-2.1.0.tgz#0e0afe646c1a0e44a0e18785f518c42633ec8efc"
+  integrity sha512-hUlonro+pYoZcwrH6Vm56B2ftLfQh046hrwif/VwLIw1j3zGt52p5mREBwmeVzXnSwgnagpOpfafspzs1asjGw==
+  dependencies:
+    "@babel/runtime" "^7.11.1"
+    classnames "^2.2.1"
+    rc-motion "^2.4.4"
+    rc-util "^5.17.0"
+
+rc-select@~14.1.0, rc-select@~14.1.13:
+  version "14.1.13"
+  resolved "http://npm.xyb2b.com.cn/rc-select/-/rc-select-14.1.13.tgz#7eb53d00be82fb8e5050de3094e72edcf27ce6f6"
+  integrity sha512-WMEsC3gTwA1dbzWOdVIXDmWyidYNLq68AwvvUlRROw790uGUly0/vmqDozXrIr0QvN/A3CEULx12o+WtLCAefg==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "2.x"
+    rc-motion "^2.0.1"
+    rc-overflow "^1.0.0"
+    rc-trigger "^5.0.4"
+    rc-util "^5.16.1"
+    rc-virtual-list "^3.2.0"
+
+rc-slider@~10.0.0:
+  version "10.0.1"
+  resolved "http://npm.xyb2b.com.cn/rc-slider/-/rc-slider-10.0.1.tgz#7058c68ff1e1aa4e7c3536e5e10128bdbccb87f9"
+  integrity sha512-igTKF3zBet7oS/3yNiIlmU8KnZ45npmrmHlUUio8PNbIhzMcsh+oE/r2UD42Y6YD2D/s+kzCQkzQrPD6RY435Q==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.5"
+    rc-util "^5.18.1"
+    shallowequal "^1.1.0"
+
+rc-steps@~5.0.0-alpha.2:
+  version "5.0.0"
+  resolved "http://npm.xyb2b.com.cn/rc-steps/-/rc-steps-5.0.0.tgz#2e2403f2dd69eb3966d65f461f7e3a8ee1ef69fe"
+  integrity sha512-9TgRvnVYirdhbV0C3syJFj9EhCRqoJAsxt4i1rED5o8/ZcSv5TLIYyo4H8MCjLPvbe2R+oBAm/IYBEtC+OS1Rw==
+  dependencies:
+    "@babel/runtime" "^7.16.7"
+    classnames "^2.2.3"
+    rc-util "^5.16.1"
+
+rc-switch@~3.2.0:
+  version "3.2.2"
+  resolved "http://npm.xyb2b.com.cn/rc-switch/-/rc-switch-3.2.2.tgz#d001f77f12664d52595b4f6fb425dd9e66fba8e8"
+  integrity sha512-+gUJClsZZzvAHGy1vZfnwySxj+MjLlGRyXKXScrtCTcmiYNPzxDFOxdQ/3pK1Kt/0POvwJ/6ALOR8gwdXGhs+A==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.1"
+    rc-util "^5.0.1"
+
+rc-table@~7.26.0:
+  version "7.26.0"
+  resolved "http://npm.xyb2b.com.cn/rc-table/-/rc-table-7.26.0.tgz#9d517e7fa512e7571fdcc453eb1bf19edfac6fbc"
+  integrity sha512-0cD8e6S+DTGAt5nBZQIPFYEaIukn17sfa5uFL98faHlH/whZzD8ii3dbFL4wmUDEL4BLybhYop+QUfZJ4CPvNQ==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.5"
+    rc-resize-observer "^1.1.0"
+    rc-util "^5.22.5"
+    shallowequal "^1.1.0"
+
+rc-tabs@~12.2.0:
+  version "12.2.2"
+  resolved "http://npm.xyb2b.com.cn/rc-tabs/-/rc-tabs-12.2.2.tgz#2f2f86399778d45c47e6756536e15c13cd064455"
+  integrity sha512-Q26L64pjTiiARL+T59Pi9d4lZsUV2mhC8NQEpVK1a8dxXS9KQPY58tNtlx++o6qHRnZVo/sx22v9BqtM9ZKh7g==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+    classnames "2.x"
+    rc-dropdown "~4.0.0"
+    rc-menu "~9.6.0"
+    rc-motion "^2.6.2"
+    rc-resize-observer "^1.0.0"
+    rc-util "^5.16.0"
+
+rc-textarea@^0.4.0, rc-textarea@~0.4.5:
+  version "0.4.6"
+  resolved "http://npm.xyb2b.com.cn/rc-textarea/-/rc-textarea-0.4.6.tgz#65a46c9bb45da65c2acb9b071551eb420f6568e4"
+  integrity sha512-HEKCu8nouXXayqYelQnhQm8fdH7v92pAQvfVCz+jhIPv2PHTyBxVrmoZJMn3B8cU+wdyuvRGkshngO3/TzBn4w==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "^2.2.1"
+    rc-resize-observer "^1.0.0"
+    rc-util "^5.24.4"
+    shallowequal "^1.1.0"
+
+rc-tooltip@~5.2.0:
+  version "5.2.2"
+  resolved "http://npm.xyb2b.com.cn/rc-tooltip/-/rc-tooltip-5.2.2.tgz#e5cafa8ecebf78108936a0bcb93c150fa81ac93b"
+  integrity sha512-jtQzU/18S6EI3lhSGoDYhPqNpWajMtS5VV/ld1LwyfrDByQpYmw/LW6U7oFXXLukjfDHQ7Ju705A82PRNFWYhg==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+    classnames "^2.3.1"
+    rc-trigger "^5.0.0"
+
+rc-tree-select@~5.5.0:
+  version "5.5.3"
+  resolved "http://npm.xyb2b.com.cn/rc-tree-select/-/rc-tree-select-5.5.3.tgz#9c19f74b55a00f17e31a81cf04c834e63e6bee27"
+  integrity sha512-gv8KyC6J7f9e50OkGk1ibF7v8vL+iaBnA8Ep/EVlMma2/tGdBQXO9xIvPjX8eQrZL5PjoeTUndNPM3cY3721ng==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "2.x"
+    rc-select "~14.1.0"
+    rc-tree "~5.7.0"
+    rc-util "^5.16.1"
+
+rc-tree@~5.7.0:
+  version "5.7.0"
+  resolved "http://npm.xyb2b.com.cn/rc-tree/-/rc-tree-5.7.0.tgz#d0e316eeeac2ba4a1c36b2b2201d84884f1c76a1"
+  integrity sha512-F+Ewkv/UcutshnVBMISP+lPdHDlcsL+YH/MQDVWbk+QdkfID7vXiwrHMEZn31+2Rbbm21z/HPceGS8PXGMmnQg==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "2.x"
+    rc-motion "^2.0.1"
+    rc-util "^5.16.1"
+    rc-virtual-list "^3.4.8"
+
+rc-trigger@^5.0.0, rc-trigger@^5.0.4, rc-trigger@^5.1.2, rc-trigger@^5.2.10, rc-trigger@^5.3.1:
+  version "5.3.3"
+  resolved "http://npm.xyb2b.com.cn/rc-trigger/-/rc-trigger-5.3.3.tgz#166013df79e6a4ce64515391bd6d4f8386839761"
+  integrity sha512-IC4nuTSAME7RJSgwvHCNDQrIzhvGMKf6NDu5veX+zk1MG7i1UnwTWWthcP9WHw3+FZfP3oZGvkrHFPu/EGkFKw==
+  dependencies:
+    "@babel/runtime" "^7.18.3"
+    classnames "^2.2.6"
+    rc-align "^4.0.0"
+    rc-motion "^2.0.0"
+    rc-util "^5.19.2"
+
+rc-upload@~4.3.0:
+  version "4.3.4"
+  resolved "http://npm.xyb2b.com.cn/rc-upload/-/rc-upload-4.3.4.tgz#83ff7d3867631c37adbfd72ea3d1fd7e97ca84af"
+  integrity sha512-uVbtHFGNjHG/RyAfm9fluXB6pvArAGyAx8z7XzXXyorEgVIWj6mOlriuDm0XowDHYz4ycNK0nE0oP3cbFnzxiQ==
+  dependencies:
+    "@babel/runtime" "^7.18.3"
+    classnames "^2.2.5"
+    rc-util "^5.2.0"
+
+rc-util@^5.0.1, rc-util@^5.0.6, rc-util@^5.12.0, rc-util@^5.15.0, rc-util@^5.16.0, rc-util@^5.16.1, rc-util@^5.17.0, rc-util@^5.18.1, rc-util@^5.19.2, rc-util@^5.2.0, rc-util@^5.2.1, rc-util@^5.20.1, rc-util@^5.21.0, rc-util@^5.21.2, rc-util@^5.22.5, rc-util@^5.23.0, rc-util@^5.24.4, rc-util@^5.3.0, rc-util@^5.4.0, rc-util@^5.6.1, rc-util@^5.8.0, rc-util@^5.9.4:
+  version "5.24.4"
+  resolved "http://npm.xyb2b.com.cn/rc-util/-/rc-util-5.24.4.tgz#a4126f01358c86f17c1bf380a1d83d6c9155ae65"
+  integrity sha512-2a4RQnycV9eV7lVZPEJ7QwJRPlZNc06J7CwcwZo4vIHr3PfUqtYgl1EkUV9ETAc6VRRi8XZOMFhYG63whlIC9Q==
+  dependencies:
+    "@babel/runtime" "^7.18.3"
+    react-is "^16.12.0"
+    shallowequal "^1.1.0"
+
+rc-virtual-list@^3.2.0, rc-virtual-list@^3.4.8:
+  version "3.4.11"
+  resolved "http://npm.xyb2b.com.cn/rc-virtual-list/-/rc-virtual-list-3.4.11.tgz#97f5e947380d546a2ca8ad229d8e41e9b33b20c6"
+  integrity sha512-BvUUH60kkeTBPigN5F89HtGaA5jSP4y2aM6cJ4dk9Y42I9yY+h6i08wF6UKeDcxdfOU8j3I5HxkSS/xA77J3wA==
+  dependencies:
+    "@babel/runtime" "^7.20.0"
+    classnames "^2.2.6"
+    rc-resize-observer "^1.0.0"
+    rc-util "^5.15.0"
+
 react-app-polyfill@^3.0.0:
   version "3.0.0"
   resolved "http://npm.xyb2b.com.cn/react-app-polyfill/-/react-app-polyfill-3.0.0.tgz#95221e0a9bd259e5ca6b177c7bb1cb6768f68fd7"
@@ -7414,7 +7937,7 @@ react-error-overlay@^6.0.11:
   resolved "http://npm.xyb2b.com.cn/react-error-overlay/-/react-error-overlay-6.0.11.tgz#92835de5841c5cf08ba00ddd2d677b6d17ff9adb"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
 
-react-is@^16.13.1:
+react-is@^16.12.0, react-is@^16.13.1:
   version "16.13.1"
   resolved "http://npm.xyb2b.com.cn/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
@@ -7645,6 +8168,11 @@ requires-port@^1.0.0:
   resolved "http://npm.xyb2b.com.cn/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
+resize-observer-polyfill@^1.5.1:
+  version "1.5.1"
+  resolved "http://npm.xyb2b.com.cn/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
+
 resolve-cwd@^3.0.0:
   version "3.0.0"
   resolved "http://npm.xyb2b.com.cn/resolve-cwd/-/resolve-cwd-3.0.0.tgz#0f0075f1bb2544766cf73ba6a6e2adfebcb13f2d"
@@ -7830,6 +8358,13 @@ schema-utils@^4.0.0:
     ajv-formats "^2.1.1"
     ajv-keywords "^5.0.0"
 
+scroll-into-view-if-needed@^2.2.25:
+  version "2.2.29"
+  resolved "http://npm.xyb2b.com.cn/scroll-into-view-if-needed/-/scroll-into-view-if-needed-2.2.29.tgz#551791a84b7e2287706511f8c68161e4990ab885"
+  integrity sha512-hxpAR6AN+Gh53AdAimHM6C8oTN1ppwVZITihix+WqalywBeFcQ6LdQP5ABNl26nX8GTEL7VT+b8lKpdqq65wXg==
+  dependencies:
+    compute-scroll-into-view "^1.0.17"
+
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "http://npm.xyb2b.com.cn/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
@@ -7919,6 +8454,11 @@ setprototypeof@1.2.0:
   version "1.2.0"
   resolved "http://npm.xyb2b.com.cn/setprototypeof/-/setprototypeof-1.2.0.tgz#66c9a24a73f9fc28cbe66b09fed3d33dcaf1b424"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
+
+shallowequal@^1.1.0:
+  version "1.1.0"
+  resolved "http://npm.xyb2b.com.cn/shallowequal/-/shallowequal-1.1.0.tgz#188d521de95b9087404fd4dcb68b13df0ae4e7f8"
+  integrity sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==
 
 shebang-command@^2.0.0:
   version "2.0.0"
@@ -8078,6 +8618,11 @@ statuses@2.0.1:
   version "1.5.0"
   resolved "http://npm.xyb2b.com.cn/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+
+string-convert@^0.2.0:
+  version "0.2.1"
+  resolved "http://npm.xyb2b.com.cn/string-convert/-/string-convert-0.2.1.tgz#6982cc3049fbb4cd85f8b24568b9d9bf39eeff97"
+  integrity sha1-aYLMMEn7tM2F+LJFaLnZvznu/5c=
 
 string-length@^4.0.1:
   version "4.0.2"
@@ -8422,6 +8967,11 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+toggle-selection@^1.0.6:
+  version "1.0.6"
+  resolved "http://npm.xyb2b.com.cn/toggle-selection/-/toggle-selection-1.0.6.tgz#6e45b1263f2017fa0acc7d89d78b15b8bf77da32"
+  integrity sha1-bkWxJj8gF/oKzH2J14sVuL932jI=
 
 toidentifier@1.0.1:
   version "1.0.1"

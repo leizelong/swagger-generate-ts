@@ -34,7 +34,6 @@ async function loadWebView(
   const rootPath = vscode.Uri.file(path.join(extensionPath, "web-app/build"));
   const baseUri = panel.webview.asWebviewUri(rootPath);
   panel.webview.html = webAppHtml.replace(/\/\$root/g, baseUri.toString());
-  // panel.webview.html = testHtml;
   panel.webview.onDidReceiveMessage(onReceiveMessage);
   return panel;
 }
@@ -47,8 +46,8 @@ async function loadWebView(
 export const generateDefinitions = (extensionPath: string) =>
   async function generateDefinitions() {
     try {
-      // const openApiData = await getOpenApiData();
-      const openApiData = {} as any;
+      const openApiData = await getOpenApiData();
+      // const openApiData = {} as any;
       // mock Test
       const receiveData: ChannelData = {
         // servicePath: '/src/service/'
@@ -72,11 +71,24 @@ export const generateDefinitions = (extensionPath: string) =>
         try {
           await genDefinitions(channelData.routes, openApiData);
           await genServices(channelData, openApiData);
-        } catch (error) {
+          panel.webview.postMessage({
+            success: true,
+            source: "vscode",
+          });
+        } catch (error: any) {
           console.log("error", error);
+          panel.webview.postMessage({
+            errorMessage: error.message,
+            success: false,
+            source: "vscode",
+          });
         }
 
-        panel.webview.postMessage({ msg: "success", success: true });
+        // panel.webview.postMessage({
+        //   msg: "success",
+        //   success: true,
+        //   source: "vscode",
+        // });
       };
       const panel = await loadWebView(onReceiveMessage, extensionPath);
     } catch (error: any) {

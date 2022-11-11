@@ -13,12 +13,14 @@
     "@types/node": "^16.18.3",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
+    "antd": "^4.24.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.0",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4"
   },
+  "homepage": "$root",
   "devDependencies": {
     "coa": "2.0.2"
   },
