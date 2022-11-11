@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Select, Button, Row, Col, Space, message } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./App.css";
@@ -10,6 +10,10 @@ interface VsCodeMessage {
   errorMessage?: string;
   success?: boolean;
   source: string;
+  type: "init-config";
+  config: {
+    openApiJsonUrlOptions: any[];
+  };
 }
 const methodsOptions = [
   { label: "Get", value: "get" },
@@ -28,9 +32,8 @@ try {
 
 function App() {
   const [form] = Form.useForm<Partial<ChannelData>>();
-
+  const [openApiJsonUrlOptions, setOpenApiJsonUrlOptions] = useState<any[]>([]);
   async function onSubmit() {
-   
     await form.validateFields();
     console.log("form", form.getFieldsValue());
     const data = form.getFieldsValue();
@@ -41,7 +44,12 @@ function App() {
   useEffect(() => {
     function onMessage(event: { data: VsCodeMessage }) {
       const data = event.data; // The JSON data our extension sent
-      if(data.source !== 'vscode') return;
+      if (data.source !== "vscode") return;
+      if (data.type === "init-config") {
+        setOpenApiJsonUrlOptions(data.config.openApiJsonUrlOptions);
+        console.log("init-config", data);
+        return;
+      }
       if (data.success) {
         message.success("成功");
       } else {
@@ -67,8 +75,13 @@ function App() {
             wrapperCol={{ span: 16 }}
             initialValues={{ routes: [{}] }}
           >
-            <Form.Item name="openApiJsonUrl" label="openApiJsonUrl">
-              <Input></Input>
+            <Form.Item
+              name="openApiJsonUrl"
+              label="openApiJsonUrl"
+              rules={[{ required: true, message: "openApiJsonUrl必填" }]}
+            >
+              {/* <Input></Input> */}
+              <Select options={openApiJsonUrlOptions}></Select>
             </Form.Item>
 
             <Form.Item label="填写路由方法和路径">
@@ -85,7 +98,7 @@ function App() {
                           {...field}
                           name={[field.name, "method"]}
                           // label="method"
-                          rules={[{ required: true, message: "Missing sight" }]}
+                          rules={[{ required: true }]}
                           initialValue="post"
                         >
                           <Select
@@ -99,7 +112,7 @@ function App() {
                           // noStyle
                           name={[field.name, "url"]}
                           // label="url"
-                          rules={[{ required: true, message: "Missing price" }]}
+                          rules={[{ required: true }]}
                         >
                           <Input
                             style={{ width: 400 }}

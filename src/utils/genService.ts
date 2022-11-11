@@ -3,7 +3,7 @@
  */
 import * as path from "path";
 import * as fs from "fs";
-
+import * as vscode from "vscode";
 import { print, types, prettyPrint } from "recast";
 import {
   TSInterfaceDeclaration,
@@ -29,7 +29,10 @@ import { namedTypes } from "ast-types";
 function initAstRequestImport(ast: TsAst, method: Methods) {
   const { identifier, importDeclaration, importSpecifier, stringLiteral } =
     types.builders;
-  const requestImportPath = "@/utils/request";
+  const requestImportPath: string =
+    vscode.workspace
+      .getConfiguration("swagger-generate-ts")
+      .get("requestImportPath") || "@/utils/request";
   const { targetImportNode } = getImportNodes(ast, requestImportPath);
 
   if (targetImportNode) {
@@ -239,7 +242,7 @@ async function genService(
 }
 
 export async function genServices(
-  channelData: ChannelData,
+  channelData: ReceiveData,
   openApiData: OpenApiData,
 ) {
   const { openApiJson, openApiAst } = openApiData;

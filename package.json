@@ -28,10 +28,14 @@
       "type": "object",
       "title": "设置openApiJson获取Url",
       "properties": {
-        "swagger-generate-ts.settingOpenApiJsonUrl": {
+        "swagger-generate-ts.openApiJsonUrlOptions": {
+          "type": "array",
+          "description": "配置多份openApiJsonUrl"
+        },
+        "swagger-generate-ts.requestImportPath": {
           "type": "string",
-          "default": "http://un-api.test.bbmall.xyb2b.com.cn/admin/v2/api-docs",
-          "description": "可以获取openApiJson的Url"
+          "default": "@/utils/request",
+          "description": "import { get, post } from '${requestImportPath}'"
         }
       }
     }

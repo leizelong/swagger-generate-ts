@@ -40,15 +40,15 @@ export async function getTargetAst(
   return { targetAst, fileExist };
 }
 
-export async function fetchOpenApiJson(): Promise<OpenApiJson> {
-  let openApiUrl = vscode.workspace
+export async function fetchOpenApiJson(url: string): Promise<OpenApiJson> {
+  let openApiUrl = url || vscode.workspace
     .getConfiguration("swagger-generate-ts")
     .get("settingOpenApiJsonUrl");
   // console.log("openApiUrl", openApiUrl);
   if (!openApiUrl) {
     throw new Error("请在Setting中配置settingOpenApiJsonUrl");
   }
-  openApiUrl += `?timestamp=${new Date().getTime()}`;
+  // openApiUrl += `?timestamp=${new Date().getTime()}`;
   try {
     console.log("openApiUrl", openApiUrl);
     const res = await axios.get(openApiUrl);
@@ -182,8 +182,8 @@ export interface OpenApiData {
   openApiAst: TsAst;
 }
 
-export async function getOpenApiData(): Promise<OpenApiData> {
-  const openApiJson = await fetchOpenApiJson();
+export async function getOpenApiData(url: string): Promise<OpenApiData> {
+  const openApiJson = await fetchOpenApiJson(url);
   const swaggerVersion = Number(openApiJson.swagger);
   const tsSourceCode = await openapiTS(openApiJson, {
     version: swaggerVersion,
