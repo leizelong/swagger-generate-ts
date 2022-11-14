@@ -27,7 +27,7 @@
 ```
 ![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step1-options.jpg?raw=true)
 
-![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step1-openApiUrl.jpg?raw=true)
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step1-openApiUrl.jpeg?raw=true)
 
 * 配置项 `swagger-generate-ts.requestImportPath` 作用于 
 ``` js 
@@ -37,19 +37,19 @@ import { get, post } from '${requestImportPath}'
 ### step2: Open WebView
 * `Cmp+shift+P`  and typing `SwaggerGenerateTs`.
 
-![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-webview.jpg?raw=true)
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-webview.jpeg?raw=true)
 
 * 从SwaggerApiDocs拿到我们想要转换的接口路由
 
-![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-swagger-docs.jpg?raw=true)
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-swagger-docs.jpeg?raw=true)
 
 * 填写表单
 
-![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-form.jpg?raw=true)
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-form.jpeg?raw=true)
 
 * 生成的文件
 
-![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-result.jpg?raw=true)
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-result.jpeg?raw=true)
 
 * 生成路径的规则：声明文件是放在根目录definitions/xx；api文件是放在src/services/xx
 
