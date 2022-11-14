@@ -1,47 +1,60 @@
-# Welcome to your VS Code Extension
+# Welcome to your Swagger Generate Ts
 
-## What's in the folder
+## Description
+* We can use this plugin to generate Ts declarations and Ts request files through Swagger Api Json
 
-* This folder contains all of the files necessary for your extension.
-* `package.json` - this is the manifest file in which you declare your extension and command.
-  * The sample plugin registers a command and defines its title and command name. With this information VS Code can show the command in the command palette. It doesn’t yet need to load the plugin.
-* `src/extension.ts` - this is the main file where you will provide the implementation of your command.
-  * The file exports one function, `activate`, which is called the very first time your extension is activated (in this case by executing the command). Inside the `activate` function we call `registerCommand`.
-  * We pass the function containing the implementation of the command as the second parameter to `registerCommand`.
+## How to use it？
 
-## Setup
+### step1: Configure the openApiJson List
 
-* install the recommended extensions (amodio.tsl-problem-matcher and dbaeumer.vscode-eslint)
+* `Cmd+,` 打开用户设置，搜索`swagger-generate-ts.openApiJsonUrlOptions`
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step1-setting.jpg?raw=true)
+* 配置项格式 value 是一个标准的openApiJson的get资源,可参考 https://editor.swagger.io/。可在我们的SwaggerApiDocs平台上F12查看有没有类似的`api-docs`请求
+``` json
+[
+    {
+      "label": "admin",
+      "value": "http://xxx/admin/v2/api-docs"
+    },
+    {
+      "label": "gmp-product-library-portal",
+      "value": "http://xxx/gmp-product-library-portal/v2/api-docs"
+    },
+  ]
+```
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step1-options.jpg?raw=true)
 
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step1-openApiUrl?raw=true)
 
-## Get up and running straight away
+* 配置项 `swagger-generate-ts.requestImportPath` 作用于 
+``` js 
+import { get, post } from '${requestImportPath}'
+```
 
-* Press `F5` to open a new window with your extension loaded.
-* Run your command from the command palette by pressing (`Ctrl+Shift+P` or `Cmd+Shift+P` on Mac) and typing `Hello World`.
-* Set breakpoints in your code inside `src/extension.ts` to debug your extension.
-* Find output from your extension in the debug console.
+### step2: Open WebView
+* `Cmp+shift+P`  and typing `SwaggerGenerateTs`.
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-webview.jpg?raw=true)
+* 从SwaggerApiDocs拿到我们想要转换的接口路由
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-swagger-docs.jpg?raw=true)
 
-## Make changes
+* 填写表单
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-form.jpg?raw=true)
 
-* You can relaunch the extension from the debug toolbar after changing code in `src/extension.ts`.
-* You can also reload (`Ctrl+R` or `Cmd+R` on Mac) the VS Code window with your extension to load your changes.
+* 生成的文件
+![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step2-result.jpg?raw=true)
 
+* 生成路径的规则：声明文件是放在根目录definitions/xx；api文件是放在src/services/xx
 
-## Explore the API
+* 遇到`@definitions` `@/utils` 等无法找到文件路径tsLint报错问题，请配置tsconfig.json 和 webpack resolve.alias 配置项
 
-* You can open the full set of our API when you open the file `node_modules/@types/vscode/index.d.ts`.
-
-## Run tests
-
-* Open the debug viewlet (`Ctrl+Shift+D` or `Cmd+Shift+D` on Mac) and from the launch configuration dropdown pick `Extension Tests`.
-* Press `F5` to run the tests in a new window with your extension loaded.
-* See the output of the test result in the debug console.
-* Make changes to `src/test/suite/extension.test.ts` or create new test files inside the `test/suite` folder.
-  * The provided test runner will only consider files matching the name pattern `**.test.ts`.
-  * You can create folders inside the `test` folder to structure your tests any way you want.
-
-## Go further
-
-* Reduce the extension size and improve the startup time by [bundling your extension](https://code.visualstudio.com/api/working-with-extensions/bundling-extension).
-* [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) on the VS Code extension marketplace.
-* Automate builds by setting up [Continuous Integration](https://code.visualstudio.com/api/working-with-extensions/continuous-integration).
+``` json 
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@definitions/*": ["definitions/*"],
+      "@/*": ["src/*"]
+    }
+  }
+}
+```

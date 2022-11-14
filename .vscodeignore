@@ -16,3 +16,4 @@ vsc-extension-quickstart.md
 **/mock/**
 web-app/**
 !web-app/build/**/*
+/media/**

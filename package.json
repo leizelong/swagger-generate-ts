@@ -21,7 +21,8 @@
     "commands": [
       {
         "command": "swagger-generate-ts.definitions",
-        "title": "生成definitions文件"
+        "title": "SwaggerApi生成Ts声明和请求",
+        "category": "SwaggerGenerateTs"
       }
     ],
     "configuration": {
