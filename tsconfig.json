@@ -5,6 +5,7 @@
     "lib": ["ES2020"],
     "sourceMap": true,
     "rootDir": "src",
+    "baseUrl": "./",
     "paths": {
       "@definitions/*": ["definitions/*"]
     },
