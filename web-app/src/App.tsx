@@ -48,7 +48,7 @@ function App() {
       if (data.type === "init-config") {
         setOpenApiJsonUrlOptions(data.config.openApiJsonUrlOptions);
         console.log("init-config", data);
-        return;
+        return; 
       }
       if (data.success) {
         message.success("成功");

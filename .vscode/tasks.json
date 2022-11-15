@@ -5,36 +5,37 @@
   "tasks": [
     {
       "label": "tasks: default",
-      "dependsOn": ["npm: watch", "webview"],
-	  "dependsOrder": "parallel",
-      "problemMatcher": [],
-	  "group": {
+      "dependsOn": ["webview", "npm: watch"],
+      "dependsOrder": "sequence",
+      "problemMatcher": "$ts-webpack-watch",
+      "group": {
         "kind": "build",
-        "isDefault": true
-      },
+        // "isDefault": true
+      }
     },
     {
+      // "label": "extenstion-watch",
       "type": "npm",
       "script": "watch",
       "problemMatcher": "$ts-webpack-watch",
       "isBackground": true,
       "presentation": {
         "reveal": "never",
-        "group": "watchers",
+        "group": "watchers"
       },
       "group": {
         "kind": "build",
-        // "isDefault": true
-      },
+        "isDefault": true
+      }
     },
     {
       "label": "webview",
       "type": "npm",
-      "script": "start",
+      "script": "watch-build",
       "isBackground": true,
       "presentation": {
         "reveal": "never",
-        "group": "watchers",
+        "group": "watchers"
       },
       "group": {
         "kind": "build"
