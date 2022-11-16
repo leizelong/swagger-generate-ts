@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form, Input, Select, Button, Row, Col, Space, message } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./App.css";
+// import 'antd/dist/antd.css'; 
 
 interface ChannelData {
   routes: { method: string; url: string }[];
