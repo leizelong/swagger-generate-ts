@@ -10,7 +10,8 @@
     "url": "https://github.com/leizelong/swagger-generate-ts"
   },
   "publisher": "leizl",
-  "license": "",
+  "icon": "icon.png",
+  "license": "MIT",
   "categories": [
     "Other"
   ],
