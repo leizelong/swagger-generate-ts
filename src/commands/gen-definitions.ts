@@ -3,59 +3,7 @@ import * as fs from "fs";
 import * as vscode from "vscode";
 import { genDefinitions } from "../utils/genDefinition";
 import { genServices } from "../utils/genService";
-import { getConfig, getOpenApiData } from "../utils/common";
-import * as path from "path";
-
-const axios = require("axios");
-
-async function loadWebView(
-  onReceiveMessage: (message: ReceiveData) => void,
-  extensionPath: string,
-) {
-  const panel = vscode.window.createWebviewPanel(
-    "SwaggerGen",
-    "SwaggerGen",
-    vscode.ViewColumn.One,
-    {
-      enableScripts: true,
-      retainContextWhenHidden: true,
-      // 只允许webview加载我们插件的`media`目录下的资源
-      // localResourceRoots: [
-      //   vscode.Uri.file(path.join(extensionPath, "web-app/build")),
-      // ],
-    },
-  );
-  const config = getConfig(extensionPath);
-  const isDebug = config.debug;
-
-  async function loadRemoteHtml() {
-    const { data: html } = await axios.get("http://localhost:3000");
-    panel.webview.html = html.replace(
-      /\/\$root/g,
-      "http://localhost:3000/$root",
-    );
-  }
-
-  async function loadLocalHtml() {
-    const htmlPath = path.resolve(extensionPath, "web-app/build/index.html");
-    const webAppHtml = await fs.promises.readFile(htmlPath, {
-      encoding: "utf-8",
-    });
-    const rootPath = vscode.Uri.file(path.join(extensionPath, "web-app/build"));
-    const baseUri = panel.webview.asWebviewUri(rootPath);
-    panel.webview.html = webAppHtml.replace(/\/\$root/g, baseUri.toString());
-  }
-
-  if (isDebug) {
-    await loadRemoteHtml();
-  } else {
-    await loadLocalHtml();
-  }
-  
-  panel.webview.onDidReceiveMessage(onReceiveMessage);
-
-  return panel;
-}
+import { getOpenApiData, loadWebView } from "../utils/common";
 
 /**
  * 输入swagger api url，生成Definitions文件
@@ -68,30 +16,10 @@ export const generateDefinitions = (extensionPath: string) =>
       .getConfiguration("swagger-generate-ts")
       .get("openApiJsonUrlOptions");
     try {
-      // const openApiData = await getOpenApiData();
-      // const openApiData = {} as any;
-      // mock Test
-      // const receiveData: ChannelData = {
-      //   // servicePath: '/src/service/'
-      //   routes: [
-      //     {
-      //       url: "/admin/media/refluxCategory/queryChannelCategory",
-      //       method: "get",
-      //     },
-      //     {
-      //       url: "/admin/media/refluxCategory/addCategoryBinding",
-      //       method: "post",
-      //     },
-      //   ],
-      // };
-
-      // await genDefinitions(receiveData.routes, openApiData);
-      // await genServices(receiveData, openApiData);
 
       const onReceiveMessage = async (channelData: ReceiveData) => {
         console.log("webview => message", channelData);
         const { openApiJsonUrl } = channelData;
-        console.log("openApiJsonUrl", openApiJsonUrl);
         try {
           const openApiData = await getOpenApiData(openApiJsonUrl);
           await genDefinitions(channelData.routes, openApiData);

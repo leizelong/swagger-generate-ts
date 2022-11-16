@@ -33,7 +33,7 @@ function initAstRequestImport(ast: TsAst, method: Methods) {
     vscode.workspace
       .getConfiguration("swagger-generate-ts")
       .get("requestImportPath") || "@/utils/request";
-  const { targetImportNode } = getImportNodes(ast, requestImportPath);
+  const { targetImportNode, lastImportNodeIdx } = getImportNodes(ast, requestImportPath);
 
   if (targetImportNode) {
     const specifierKeys = getSpecifierKeys(targetImportNode);
@@ -47,7 +47,12 @@ function initAstRequestImport(ast: TsAst, method: Methods) {
       specifiers,
       stringLiteral(requestImportPath),
     );
-    ast.program.body.push(requestDeclaration as any);
+    ast.program.body.splice(
+      lastImportNodeIdx + 1,
+      0,
+      requestDeclaration as any,
+    );
+    // ast.program.body.push(requestDeclaration as any);
   }
 }
 

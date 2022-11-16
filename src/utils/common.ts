@@ -11,6 +11,56 @@ import type {
 import openapiTS from "openapi-typescript";
 const axios = require("axios");
 
+export async function loadWebView(
+  onReceiveMessage: (message: ReceiveData) => void,
+  extensionPath: string,
+) {
+  const panel = vscode.window.createWebviewPanel(
+    "SwaggerGen",
+    "SwaggerGen",
+    vscode.ViewColumn.One,
+    {
+      enableScripts: true,
+      retainContextWhenHidden: true,
+      // 只允许webview加载我们插件的`media`目录下的资源
+      // localResourceRoots: [
+      //   vscode.Uri.file(path.join(extensionPath, "web-app/build")),
+      // ],
+    },
+  );
+  const config = getConfig(extensionPath);
+  const isDebug = config.debug;
+
+  async function loadRemoteHtml() {
+    const { data: html } = await axios.get("http://localhost:3000");
+    panel.webview.html = html.replace(
+      /\/\$root/g,
+      "http://localhost:3000/$root",
+    );
+  }
+
+  async function loadLocalHtml() {
+    const htmlPath = path.resolve(extensionPath, "web-app/build/index.html");
+    const webAppHtml = await fs.promises.readFile(htmlPath, {
+      encoding: "utf-8",
+    });
+    const rootPath = vscode.Uri.file(path.join(extensionPath, "web-app/build"));
+    const baseUri = panel.webview.asWebviewUri(rootPath);
+    panel.webview.html = webAppHtml.replace(/\/\$root/g, baseUri.toString());
+  }
+
+  if (isDebug) {
+    await loadRemoteHtml();
+  } else {
+    await loadLocalHtml();
+  }
+  
+  panel.webview.onDidReceiveMessage(onReceiveMessage);
+
+  return panel;
+}
+
+
 interface Config {
   debug: boolean;
 }
@@ -55,26 +105,25 @@ export async function getTargetAst(
 }
 
 export async function fetchOpenApiJson(url: string): Promise<OpenApiJson> {
-  let openApiUrl =
-    url ||
-    vscode.workspace
-      .getConfiguration("swagger-generate-ts")
-      .get("settingOpenApiJsonUrl");
+  // let openApiUrl =
+  //   url ||
+  //   vscode.workspace
+  //     .getConfiguration("swagger-generate-ts")
+  //     .get("settingOpenApiJsonUrl");
   // console.log("openApiUrl", openApiUrl);
-  if (!openApiUrl) {
-    throw new Error("请在Setting中配置settingOpenApiJsonUrl");
-  }
+  // if (!openApiUrl) {
+  //   throw new Error("请在Setting中配置settingOpenApiJsonUrl");
+  // }
   // openApiUrl += `?timestamp=${new Date().getTime()}`;
   try {
-    console.log("openApiUrl", openApiUrl);
-    const res = await axios.get(openApiUrl);
+    const res = await axios.get(url);
     const openApiJson = res.data;
     if (!openApiJson.swagger) {
       throw new Error("不是标准的openApiJson");
     }
     return openApiJson;
   } catch (error: any) {
-    throw new Error(`get openApiJson failed: ${error.message}`);
+    throw new Error(`fetch openApiJsonUrl: ${url} failed: ${error.message}`);
   }
 }
 
