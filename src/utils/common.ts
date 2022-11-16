@@ -11,6 +11,20 @@ import type {
 import openapiTS from "openapi-typescript";
 const axios = require("axios");
 
+interface Config {
+  debug: boolean;
+}
+
+export function getConfig(extensionPath: string): Config {
+  try {
+    const configFilePath = path.resolve(extensionPath, ".config.json");
+    const fileStr = fs.readFileSync(configFilePath, { encoding: "utf-8" });
+    return JSON.parse(fileStr);
+  } catch (error) {
+    return { debug: false };
+  }
+}
+
 export function getProjectRoot() {
   if (!vscode.workspace.workspaceFolders?.length) {
     return __dirname;
@@ -41,9 +55,11 @@ export async function getTargetAst(
 }
 
 export async function fetchOpenApiJson(url: string): Promise<OpenApiJson> {
-  let openApiUrl = url || vscode.workspace
-    .getConfiguration("swagger-generate-ts")
-    .get("settingOpenApiJsonUrl");
+  let openApiUrl =
+    url ||
+    vscode.workspace
+      .getConfiguration("swagger-generate-ts")
+      .get("settingOpenApiJsonUrl");
   // console.log("openApiUrl", openApiUrl);
   if (!openApiUrl) {
     throw new Error("请在Setting中配置settingOpenApiJsonUrl");

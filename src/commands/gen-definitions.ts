@@ -3,8 +3,10 @@ import * as fs from "fs";
 import * as vscode from "vscode";
 import { genDefinitions } from "../utils/genDefinition";
 import { genServices } from "../utils/genService";
-import { getOpenApiData } from "../utils/common";
+import { getConfig, getOpenApiData } from "../utils/common";
 import * as path from "path";
+
+const axios = require("axios");
 
 async function loadWebView(
   onReceiveMessage: (message: ReceiveData) => void,
@@ -23,14 +25,35 @@ async function loadWebView(
       // ],
     },
   );
-  const htmlPath = path.resolve(extensionPath, "web-app/build/index.html");
-  const webAppHtml = await fs.promises.readFile(htmlPath, {
-    encoding: "utf-8",
-  });
-  const rootPath = vscode.Uri.file(path.join(extensionPath, "web-app/build"));
-  const baseUri = panel.webview.asWebviewUri(rootPath);
-  panel.webview.html = webAppHtml.replace(/\/\$root/g, baseUri.toString());
+  const config = getConfig(extensionPath);
+  const isDebug = config.debug;
+
+  async function loadRemoteHtml() {
+    const { data: html } = await axios.get("http://localhost:3000");
+    panel.webview.html = html.replace(
+      /\/\$root/g,
+      "http://localhost:3000/$root",
+    );
+  }
+
+  async function loadLocalHtml() {
+    const htmlPath = path.resolve(extensionPath, "web-app/build/index.html");
+    const webAppHtml = await fs.promises.readFile(htmlPath, {
+      encoding: "utf-8",
+    });
+    const rootPath = vscode.Uri.file(path.join(extensionPath, "web-app/build"));
+    const baseUri = panel.webview.asWebviewUri(rootPath);
+    panel.webview.html = webAppHtml.replace(/\/\$root/g, baseUri.toString());
+  }
+
+  if (isDebug) {
+    await loadRemoteHtml();
+  } else {
+    await loadLocalHtml();
+  }
+  
   panel.webview.onDidReceiveMessage(onReceiveMessage);
+
   return panel;
 }
 

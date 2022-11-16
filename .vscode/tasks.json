@@ -5,12 +5,12 @@
   "tasks": [
     {
       "label": "tasks: default",
-      "dependsOn": ["webview", "npm: watch"],
-      "dependsOrder": "sequence",
-      "problemMatcher": "$ts-webpack-watch",
+      "dependsOn": ["npm: watch", "webview"],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
       "group": {
         "kind": "build",
-        // "isDefault": true
+        "isDefault": true
       }
     },
     {
@@ -20,18 +20,19 @@
       "problemMatcher": "$ts-webpack-watch",
       "isBackground": true,
       "presentation": {
-        "reveal": "never",
+        "reveal": "always",
         "group": "watchers"
       },
       "group": {
-        "kind": "build",
-        "isDefault": true
+        "kind": "build"
+        // "isDefault": true
       }
     },
     {
       "label": "webview",
       "type": "npm",
-      "script": "watch-build",
+      "script": "start",
+      "problemMatcher": "$ts-webpack-watch",
       "isBackground": true,
       "presentation": {
         "reveal": "never",

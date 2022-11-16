@@ -17,3 +17,4 @@ vsc-extension-quickstart.md
 web-app/**
 !web-app/build/**/*
 /media/**
+.config.json
