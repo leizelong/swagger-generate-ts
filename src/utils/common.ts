@@ -79,7 +79,7 @@ export function getProjectRoot() {
   if (!vscode.workspace.workspaceFolders?.length) {
     return __dirname;
   }
-  return vscode.workspace.workspaceFolders[0].uri.path;
+  return vscode.workspace.workspaceFolders[0].uri.fsPath;
 }
 
 export async function getTargetAst(
