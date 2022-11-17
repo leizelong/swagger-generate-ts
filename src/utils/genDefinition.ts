@@ -211,6 +211,7 @@ async function writeDefinitions(
         await fs.promises.mkdir(dirPath, { recursive: true });
       } catch (error) {
         console.log("generateFile dirPath error", dirPath, error);
+        throw error;
       }
     }
     const code = print(ast).code;
@@ -225,7 +226,6 @@ export async function writeDefinitionFile(
   operationId: string,
   url: string,
 ) {
-
   const operationsDeclaration = getExportNamedDeclaration(tsAst, "operations");
   const dtoKeys = getApiDefinitionKeys(operationsDeclaration, operationId);
   const definitionsDeclaration = getExportNamedDeclaration(

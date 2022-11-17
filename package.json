@@ -44,6 +44,7 @@
     }
   },
   "scripts": {
+    "preinstall": "yarn --cwd web-app",
     "vscode:prepublish": "npm run package",
     "build:web-view": "npm run build --prefix web-app",
     "start:web-view": "npm run start --prefix web-app",
