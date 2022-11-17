@@ -252,11 +252,11 @@ export async function genServices(
 ) {
   const { openApiJson, openApiAst } = openApiData;
   const { servicePath, routes } = channelData;
-  const projectRoot = getProjectRoot();
-  const { targetAst: testAst } = await getTargetAst(
-    path.resolve(projectRoot, "src/services/test.ts"),
-  );
-  console.log("test.ts", testAst.program.body);
+  // const projectRoot = getProjectRoot();
+  // const { targetAst: testAst } = await getTargetAst(
+  //   path.resolve(projectRoot, "src/services/test.ts"),
+  // );
+  // console.log("test.ts", testAst.program.body);
   const operationsDeclaration = getExportNamedDeclaration(
     openApiAst,
     "operations",

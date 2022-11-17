@@ -269,7 +269,7 @@ export function transformDefinitionKey(key: string | undefined) {
 function getPath(url: string, prefix: string, suffix: string) {
   const projectRoot = getProjectRoot();
   const packagePath = url.replace(/\/(.*)\/.*/, "$1");
-  return path.resolve(projectRoot, prefix, packagePath, suffix);
+  return path.join(projectRoot, prefix, packagePath, suffix);
 }
 
 export function getDefinitionPathByUrl(url: string) {
