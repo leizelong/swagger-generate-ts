@@ -16,7 +16,7 @@ export const generateDefinitions = (extensionPath: string) =>
       .getConfiguration("swagger-generate-ts")
       .get("openApiJsonUrlOptions");
     try {
-      let panel: any = {};
+      let panel: any;
 
       function postMessage(data: SendData) {
         console.log("vscode => webview data", data);
@@ -44,20 +44,20 @@ export const generateDefinitions = (extensionPath: string) =>
         }
       };
       // todo test Data
-      const formData: ReceiveData = {
-        routes: [
-          {
-            url: "/admin/corporation/corporationList",
-            method: "post",
-          },
-        ],
-        openApiJsonUrl:
-          "http://un-api.test.bbmall.xyb2b.com.cn/admin/v2/api-docs",
-      };
-      onReceiveMessage(formData);
-      return;
+      // const formData: ReceiveData = {
+      //   routes: [
+      //     {
+      //       url: "/admin/corporation/corporationList",
+      //       method: "post",
+      //     },
+      //   ],
+      //   openApiJsonUrl:
+      //     "http://un-api.test.bbmall.xyb2b.com.cn/admin/v2/api-docs",
+      // };
+      // onReceiveMessage(formData);
+      // return;
 
-       panel = await loadWebView(onReceiveMessage, extensionPath);
+      panel = await loadWebView(onReceiveMessage, extensionPath);
 
       postMessage({
         source: "vscode",

@@ -9,6 +9,7 @@ import type {
   File as TsAst,
 } from "@babel/types";
 import openapiTS from "openapi-typescript";
+
 const axios = require("axios");
 
 export async function loadWebView(
@@ -268,8 +269,7 @@ export function transformDefinitionKey(key: string | undefined) {
 
 function getPath(url: string, prefix: string, suffix: string) {
   const projectRoot = getProjectRoot();
-  const packagePath = url.replace(/\/(.*)\/.*/, "$1");
-  return path.join(projectRoot, prefix, packagePath, suffix);
+  return path.join(projectRoot, prefix, path.dirname(url), suffix);
 }
 
 export function getDefinitionPathByUrl(url: string) {
@@ -277,8 +277,7 @@ export function getDefinitionPathByUrl(url: string) {
 }
 
 export function getRelativeDefinitionPathByUrl(url: string) {
-  const packagePath = url.replace(/\/(.*)\/.*/, "$1");
-  return '@definitions' + '/' + packagePath;
+  return '@definitions' + path.dirname(url);
 }
 
 // url: /admin/media/refluxCategory/addCategoryBinding
