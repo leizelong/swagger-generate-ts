@@ -7,6 +7,7 @@ import {
   getDefinitionPathByUrl,
   getExportNamedDeclaration,
   getMethodOperationId,
+  getProjectRoot,
   getTargetAst,
   OpenApiData,
   transformDefinitionKey,
@@ -260,4 +261,13 @@ export async function genDefinitions(
   for (const route of routes) {
     await genDefinitionByRoute(route);
   }
+}
+
+export async function initDefinitions(ast: TsAst) {
+  const source = print(ast);
+  const projectRoot = getProjectRoot();
+  const filePath = path.resolve(projectRoot, "openApi.d.ts");
+  console.log("source", source);
+
+  await fs.promises.writeFile(filePath, source.code, { encoding: "utf-8" });
 }

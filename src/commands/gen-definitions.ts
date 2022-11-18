@@ -40,12 +40,12 @@ export const generateDefinitions = (extensionPath: string) =>
       // const formData: ReceiveData = {
       //   routes: [
       //     {
-      //       url: "/admin/corporation/corporationList",
+      //       url: "/gmp-product-library-portal/library/manage/region/listV2",
       //       method: "post",
       //     },
       //   ],
       //   openApiJsonUrl:
-      //     "http://un-api.test.bbmall.xyb2b.com.cn/admin/v2/api-docs",
+      //     "http://api.test.bbmall.xyb2b.com.cn/gmp-product-library-portal/v2/api-docs",
       // };
       // onReceiveMessage(formData);
       // return;

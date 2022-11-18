@@ -9,7 +9,7 @@ import type {
   File as TsAst,
 } from "@babel/types";
 import openapiTS from "openapi-typescript";
-import { genDefinitions } from "./genDefinition";
+import { genDefinitions, initDefinitions } from "./genDefinition";
 import { genServices } from "./genService";
 
 const axios = require("axios");
@@ -17,6 +17,7 @@ const axios = require("axios");
 export async function generateTsFiles(receiveData: ReceiveData) {
   const { openApiJsonUrl } = receiveData;
   const openApiData = await getOpenApiData(openApiJsonUrl);
+  // await initDefinitions(openApiData.openApiAst);
   await genDefinitions(receiveData.routes, openApiData);
   await genServices(receiveData, openApiData);
 }
@@ -64,12 +65,11 @@ export async function loadWebView(
   } else {
     await loadLocalHtml();
   }
-  
+
   panel.webview.onDidReceiveMessage(onReceiveMessage);
 
   return panel;
 }
-
 
 interface Config {
   debug: boolean;
@@ -152,23 +152,41 @@ export function getMethodOperationId(
   const { operationId } = methodEntry;
   return operationId;
 }
+function equalNamePath(
+  sourceName: OperationNamePath,
+  targetName: string | number,
+) {
+  if (Object.prototype.toString.call(sourceName) === "[object RegExp]") {
+    console.log('sourceName', sourceName, targetName)
+    return (sourceName as RegExp).test(targetName as string);
+  }
+  return sourceName === targetName;
+}
+
+type OperationNamePath = string | number | RegExp;
 
 function findOperationsDefinitionsKey(
   node: TSPropertySignature,
-  paths: (string | number)[],
+  paths: OperationNamePath[],
 ) {
-  function findOneAnnotation(node: TSPropertySignature, name: string | number) {
+  function findOneAnnotation(
+    node: TSPropertySignature,
+    name: OperationNamePath,
+  ) {
     if (node?.typeAnnotation?.typeAnnotation.type === "TSTypeLiteral") {
       const members = node.typeAnnotation.typeAnnotation.members;
       for (const member of members) {
         if (member.type === "TSPropertySignature") {
-          if (member.key.type === "Identifier" && name === member.key.name) {
+          if (
+            member.key.type === "Identifier" &&
+            equalNamePath(name, member.key.name)
+          ) {
             return member;
           }
 
           if (
             member.key.type === "NumericLiteral" &&
-            name === member.key.value
+            equalNamePath(name, member.key.value)
           ) {
             return member;
           }
@@ -218,7 +236,8 @@ export function getApiDefinitionKeys(
           const reqDtoKey = findOperationsDefinitionsKey(node, [
             "parameters",
             "body",
-            "request",
+            // "request",
+            /.*/,
           ]);
           const resDtoKey = findOperationsDefinitionsKey(node, [
             "responses",
@@ -286,7 +305,7 @@ export function getDefinitionPathByUrl(url: string) {
 }
 
 export function getRelativeDefinitionPathByUrl(url: string) {
-  return '@definitions' + path.dirname(url);
+  return "@definitions" + path.dirname(url);
 }
 
 // url: /admin/media/refluxCategory/addCategoryBinding
