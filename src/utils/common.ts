@@ -9,8 +9,17 @@ import type {
   File as TsAst,
 } from "@babel/types";
 import openapiTS from "openapi-typescript";
+import { genDefinitions } from "./genDefinition";
+import { genServices } from "./genService";
 
 const axios = require("axios");
+
+export async function generateTsFiles(receiveData: ReceiveData) {
+  const { openApiJsonUrl } = receiveData;
+  const openApiData = await getOpenApiData(openApiJsonUrl);
+  await genDefinitions(receiveData.routes, openApiData);
+  await genServices(receiveData, openApiData);
+}
 
 export async function loadWebView(
   onReceiveMessage: (message: ReceiveData) => void,
