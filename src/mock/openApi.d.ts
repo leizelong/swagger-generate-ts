@@ -1036,7 +1036,7 @@ export interface definitions {
     url: string;
   };
   /** Map«string,int» */
-  "Map«string,int»": { [key: string]: definitions["Integer"] };
+  "Map«string,int»": { [key: string]: definitions };
   /** Money */
   Money: {
     /** Format: int64 */

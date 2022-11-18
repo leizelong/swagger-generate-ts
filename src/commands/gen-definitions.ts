@@ -16,6 +16,12 @@ export const generateDefinitions = (extensionPath: string) =>
       .getConfiguration("swagger-generate-ts")
       .get("openApiJsonUrlOptions");
     try {
+      let panel: any = {};
+
+      function postMessage(data: SendData) {
+        console.log("vscode => webview data", data);
+        panel?.webview?.postMessage?.(data);
+      }
 
       const onReceiveMessage = async (channelData: ReceiveData) => {
         console.log("webview => message", channelData);
@@ -37,15 +43,28 @@ export const generateDefinitions = (extensionPath: string) =>
           });
         }
       };
-      function postMessage(data: SendData) {
-        panel.webview.postMessage(data);
-      }
-      const panel = await loadWebView(onReceiveMessage, extensionPath);
+      // todo test Data
+      const formData: ReceiveData = {
+        routes: [
+          {
+            url: "/admin/corporation/corporationList",
+            method: "post",
+          },
+        ],
+        openApiJsonUrl:
+          "http://un-api.test.bbmall.xyb2b.com.cn/admin/v2/api-docs",
+      };
+      onReceiveMessage(formData);
+      return;
+
+       panel = await loadWebView(onReceiveMessage, extensionPath);
+
       postMessage({
         source: "vscode",
         type: "init-config",
         config: {
           openApiJsonUrlOptions,
+          // formData: formData,
         },
       });
     } catch (error: any) {

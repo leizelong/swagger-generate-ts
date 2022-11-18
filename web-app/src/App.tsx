@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Form, Input, Select, Button, Row, Col, Space, message } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./App.css";
-import 'antd/dist/antd.css'; 
+import "antd/dist/antd.css";
 
 interface ChannelData {
   routes: { method: string; url: string }[];
+  openApiJsonUrl: string;
 }
 interface VsCodeMessage {
   errorMessage?: string;
@@ -14,6 +15,7 @@ interface VsCodeMessage {
   type: "init-config";
   config: {
     openApiJsonUrlOptions: any[];
+    formData?: ChannelData;
   };
 }
 const methodsOptions = [
@@ -47,9 +49,13 @@ function App() {
       const data = event.data; // The JSON data our extension sent
       if (data.source !== "vscode") return;
       if (data.type === "init-config") {
-        setOpenApiJsonUrlOptions(data.config.openApiJsonUrlOptions);
+        const { openApiJsonUrlOptions, formData } = data.config;
+        setOpenApiJsonUrlOptions(openApiJsonUrlOptions);
+        if(formData) {
+          form.setFieldsValue(formData);
+        }
         console.log("init-config", data);
-        return; 
+        return;
       }
       if (data.success) {
         message.success("成功");

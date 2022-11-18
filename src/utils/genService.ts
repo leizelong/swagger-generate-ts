@@ -156,7 +156,6 @@ function insertMethod(
   ).map(transformDefinitionKey);
 
   const importPath = getRelativeDefinitionPathByUrl(url);
-
   // todo addDefinitionImportDeclaration
   addDefinitionImportDeclaration(ast, importPath, [
     reqDefinitionKey,
