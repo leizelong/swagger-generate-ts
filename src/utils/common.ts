@@ -278,7 +278,7 @@ export function getDefinitionPathByUrl(url: string) {
 
 export function getRelativeDefinitionPathByUrl(url: string) {
   const packagePath = url.replace(/\/(.*)\/.*/, "$1");
-  return path.join("@definitions", packagePath);
+  return '@definitions' + '/' + packagePath;
 }
 
 // url: /admin/media/refluxCategory/addCategoryBinding
