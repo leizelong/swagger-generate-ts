@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import { generateDefinitions } from './commands/gen-definitions';
 import { initDefinitions } from './commands/init-definitions';
+import { initProject } from './commands/init-project';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -16,8 +17,12 @@ export function activate(context: vscode.ExtensionContext) {
 	// The commandId parameter must match the command field in package.json
 	const extensionPath  = context.extensionPath;
 	const genServiceCmd = vscode.commands.registerCommand('swagger-generate-ts.gen-services', generateDefinitions(extensionPath));
+
 	const initDefinitionsCmd = vscode.commands.registerCommand('swagger-generate-ts.init-definitions', initDefinitions);
-	context.subscriptions.push(genServiceCmd, initDefinitionsCmd);
+
+	const initProjectCmd = vscode.commands.registerCommand('swagger-generate-ts.init-project', initProject);
+
+	context.subscriptions.push(genServiceCmd, initDefinitionsCmd, initProjectCmd);
 }
 
 // This method is called when your extension is deactivated

@@ -332,3 +332,18 @@ export function getRelativeDefinitionPathByUrl(url: string) {
 export function getServicePathByUrl(url: string) {
   return getPath(url, "src/services", "index.ts");
 }
+
+
+export async function quickPickOpenApiJsonUrl() {
+  const openApiJsonUrlOptions = getOpenApiJsonUrlOptions();
+  const items = openApiJsonUrlOptions.map(({ label, value }) => ({
+    label,
+    value,
+    detail: value,
+  }));
+  const data = await vscode.window.showQuickPick(items, {
+    title: "please select openApiJsonUrl",
+    placeHolder: "select openApiJsonUrl",
+  });
+  return data?.value;
+}

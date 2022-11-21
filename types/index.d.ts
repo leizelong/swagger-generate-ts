@@ -10,14 +10,18 @@ declare interface SendData {
   type?: "init-config";
   config?: {
     openApiJsonUrlOptions: Array<{ label: string; value: string }>;
-    formData?: Partial<ReceiveData>
+    formData?: Partial<ReceiveData>;
   };
   source: "vscode";
+}
+declare interface Route {
+  method: Methods;
+  url: string;
 }
 declare interface ReceiveData {
   servicePath?: string;
   openApiJsonUrl: string;
-  routes: Array<{ method: Methods; url: string }>;
+  routes: Route[];
 }
 /** webView 通信数据源 */
 declare type ChannelData = SendData & ReceiveData;
@@ -25,7 +29,7 @@ declare type ChannelData = SendData & ReceiveData;
 type RouteEntry = Record<
   string,
   {
-    [key in Methods]: {
+    [K in Methods]: {
       operationId: string;
     };
   }

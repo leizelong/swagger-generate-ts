@@ -17,19 +17,25 @@
   ],
   "activationEvents": [
     "onCommand:swagger-generate-ts.gen-services",
-    "onCommand:swagger-generate-ts.init-definitions"
+    "onCommand:swagger-generate-ts.init-definitions",
+    "onCommand:swagger-generate-ts.init-project"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "swagger-generate-ts.gen-services",
-        "title": "SwaggerApi生成Ts声明和请求",
+        "title": "生成Ts声明和Service请求",
         "category": "SwaggerGenerateTs"
       },
       {
         "command": "swagger-generate-ts.init-definitions",
-        "title": "SwaggerApi初始化Definitions",
+        "title": "初始化Definitions",
+        "category": "SwaggerGenerateTs"
+      },
+      {
+        "command": "swagger-generate-ts.init-project",
+        "title": "初始化整个项目，生成Definitions+Services",
         "category": "SwaggerGenerateTs"
       }
     ],
