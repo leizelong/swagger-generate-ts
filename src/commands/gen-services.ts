@@ -10,8 +10,8 @@ import {
  * webView 通过api，生成definition和request文件模板
  * 最终目的是生成 get 文件
  */
-export const generateDefinitions = (extensionPath: string) =>
-  async function generateDefinitions() {
+export const generateServices = (extensionPath: string) =>
+  async function _generateServices() {
     const openApiJsonUrlOptions: any = getOpenApiJsonUrlOptions();
     try {
       let panel: any;
