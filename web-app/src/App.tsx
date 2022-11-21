@@ -18,12 +18,11 @@ interface VsCodeMessage {
     formData?: ChannelData;
   };
 }
-const methodsOptions = [
-  { label: "Get", value: "get" },
-  { label: "Post", value: "post" },
-  { label: "Put", value: "put" },
-  { label: "Delete", value: "delete" },
-];
+const methods = ["get", "post", "put", "delete", "options", "head", "patch"];
+const methodsOptions = methods.map(method => ({
+  label: method.toUpperCase(),
+  value: method,
+}));
 
 let vscode: any;
 try {
@@ -51,7 +50,7 @@ function App() {
       if (data.type === "init-config") {
         const { openApiJsonUrlOptions, formData } = data.config;
         setOpenApiJsonUrlOptions(openApiJsonUrlOptions);
-        if(formData) {
+        if (formData) {
           form.setFieldsValue(formData);
         }
         console.log("init-config", data);

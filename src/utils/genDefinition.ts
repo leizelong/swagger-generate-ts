@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { print, types, prettyPrint } from "recast";
+import { print, types } from "recast";
 import * as path from "path";
 import type { TSPropertySignature, File as TsAst } from "@babel/types";
 import {
@@ -73,7 +73,6 @@ async function writeDefinitions(
   // step2. builderBody
 
   function builderAstBody(ast: TsAst) {
-    // todo 递归寻找definitions
     const {
       exportNamedDeclaration,
       tsInterfaceDeclaration,
@@ -83,7 +82,6 @@ async function writeDefinitions(
       tsArrayType,
     } = types.builders;
 
-    // todo 递归寻找definitions
     function recursiveDefinition(
       ast: TsAst,
       definition: TSPropertySignature,

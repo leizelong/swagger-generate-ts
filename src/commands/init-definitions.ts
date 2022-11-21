@@ -10,13 +10,10 @@ async function getOpenApiJsonUrl() {
     detail: value,
   }));
   const data = await vscode.window.showQuickPick(items, {
-    title: 'please select openApiJsonUrl',
-    placeHolder: 'input openApiJsonUrl'
+    title: "please select openApiJsonUrl",
+    placeHolder: "input openApiJsonUrl",
   });
-  if (!data) {
-    throw new Error("please select openApiJsonUrl");
-  }
-  return data.value;
+  return data?.value;
 }
 
 /**
@@ -26,6 +23,9 @@ async function getOpenApiJsonUrl() {
 export async function initDefinitions() {
   try {
     const openApiJsonUrl = await getOpenApiJsonUrl();
+    if (!openApiJsonUrl) {
+      return;
+    }
     const openApiData = await getOpenApiData(openApiJsonUrl);
     await genTotalDefinitions(openApiData.openApiAst);
   } catch (error: any) {

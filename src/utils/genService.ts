@@ -4,7 +4,7 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as vscode from "vscode";
-import { print, types, prettyPrint } from "recast";
+import { print, types } from "recast";
 import {
   TSInterfaceDeclaration,
   File as TsAst,
@@ -14,11 +14,11 @@ import {
   getApiDefinitionKeys,
   getExportNamedDeclaration,
   getMethodOperationId,
-  getProjectRoot,
   getRelativeDefinitionPathByUrl,
   getServicePathByUrl,
   getTargetAst,
   OpenApiData,
+  protectKey,
   transformDefinitionKey,
 } from "./common";
 import { namedTypes } from "ast-types";
@@ -38,11 +38,11 @@ function initAstRequestImport(ast: TsAst, method: Methods) {
   if (targetImportNode) {
     const specifierKeys = getSpecifierKeys(targetImportNode);
     if (!specifierKeys.includes(method)) {
-      const methodSpecifier = importSpecifier(identifier(method));
+      const methodSpecifier = importSpecifier(identifier(protectKey(method)));
       targetImportNode.specifiers.push(methodSpecifier as any);
     }
   } else {
-    const specifiers = [importSpecifier(identifier(method))];
+    const specifiers = [importSpecifier(identifier(protectKey(method)))];
     const requestDeclaration = importDeclaration(
       specifiers,
       stringLiteral(requestImportPath),
@@ -170,7 +170,7 @@ function insertMethod(
     argsNodes.push(identifier(paramKey));
   }
   const returnNode = returnStatement(
-    callExpression(identifier(method), argsNodes),
+    callExpression(identifier(protectKey(method)), argsNodes),
   );
   const fnNode = blockStatement([returnNode]);
   const dataParamNode = identifier(paramKey);
@@ -182,7 +182,7 @@ function insertMethod(
 
   const fnParamsNodes = reqDefinitionKey ? [dataParamNode] : [];
   const fnDeclaration = functionDeclaration(
-    identifier(exportFunctionName),
+    identifier(protectKey(exportFunctionName)),
     fnParamsNodes,
     fnNode,
   );

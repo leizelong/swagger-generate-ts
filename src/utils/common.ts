@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as tsParser from "recast/parsers/typescript.js";
-import { parse, print, types, prettyPrint } from "recast";
+import { parse } from "recast";
 import * as path from "path";
 import * as vscode from "vscode";
 import type {
@@ -11,6 +11,7 @@ import type {
 import openapiTS from "openapi-typescript";
 import { genDefinitions } from "./genDefinition";
 import { genServices } from "./genService";
+import { jsKeyWordBlackList } from "../constants";
 
 const axios = require("axios");
 
@@ -242,7 +243,7 @@ export function getApiDefinitionKeys(
       if (node.key.type === "Identifier") {
         const { name } = node.key;
         if (operationId === name) {
-          // todo hit; reqDto; resDto
+          // todo hit; reqDto; resDto; query情况暂未考虑
           const reqDtoKey = findOperationsDefinitionsKey(node, [
             "parameters",
             "body",
@@ -297,11 +298,20 @@ export async function getOpenApiData(url: string): Promise<OpenApiData> {
   });
   return { openApiJson, openApiAst };
 }
+
+export function protectKey(key: string) {
+  // 与js关键字冲突,增加下划线
+  if (jsKeyWordBlackList.includes(key)) {
+    return `_${key}`;
+  }
+  return key;
+}
 /** ApiResult«List«EnumResponse»»  -> ApiResult«List«EnumResponse»»  */
 export function transformDefinitionKey(key: string | undefined) {
   if (!key) {
     return "";
   }
+  key = protectKey(key);
   return key.replace(/«/g, "").replace(/»/g, "");
 }
 
