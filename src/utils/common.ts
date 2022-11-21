@@ -9,7 +9,7 @@ import type {
   File as TsAst,
 } from "@babel/types";
 import openapiTS from "openapi-typescript";
-import { genDefinitions, initDefinitions } from "./genDefinition";
+import { genDefinitions } from "./genDefinition";
 import { genServices } from "./genService";
 
 const axios = require("axios");
@@ -17,9 +17,19 @@ const axios = require("axios");
 export async function generateTsFiles(receiveData: ReceiveData) {
   const { openApiJsonUrl } = receiveData;
   const openApiData = await getOpenApiData(openApiJsonUrl);
-  // await initDefinitions(openApiData.openApiAst);
   await genDefinitions(receiveData.routes, openApiData);
   await genServices(receiveData, openApiData);
+}
+
+export function getOpenApiJsonUrlOptions(): Array<{
+  label: string;
+  value: string;
+}> {
+  const openApiJsonUrlOptions: any =
+    vscode.workspace
+      .getConfiguration("swagger-generate-ts")
+      .get("openApiJsonUrlOptions") || [];
+  return openApiJsonUrlOptions;
 }
 
 export async function loadWebView(
@@ -157,7 +167,7 @@ function equalNamePath(
   targetName: string | number,
 ) {
   if (Object.prototype.toString.call(sourceName) === "[object RegExp]") {
-    console.log('sourceName', sourceName, targetName)
+    console.log("sourceName", sourceName, targetName);
     return (sourceName as RegExp).test(targetName as string);
   }
   return sourceName === targetName;

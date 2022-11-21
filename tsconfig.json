@@ -5,10 +5,10 @@
     "lib": ["ES2020"],
     "sourceMap": true,
     "rootDir": "src",
-    "baseUrl": "./",
-    "paths": {
-      "@definitions/*": ["definitions/*"]
-    },
+    // "baseUrl": "./",
+    // "paths": {
+    //   "@definitions/*": ["definitions/*"]
+    // },
     "strict": true /* enable all strict type-checking options */
     /* Additional Checks */
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */

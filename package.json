@@ -16,14 +16,20 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:swagger-generate-ts.definitions"
+    "onCommand:swagger-generate-ts.gen-services",
+    "onCommand:swagger-generate-ts.init-definitions"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "swagger-generate-ts.definitions",
+        "command": "swagger-generate-ts.gen-services",
         "title": "SwaggerApi生成Ts声明和请求",
+        "category": "SwaggerGenerateTs"
+      },
+      {
+        "command": "swagger-generate-ts.init-definitions",
+        "title": "SwaggerApi初始化Definitions",
         "category": "SwaggerGenerateTs"
       }
     ],
@@ -60,6 +66,7 @@
   "devDependencies": {
     "@babel/types": "^7.20.0",
     "@types/glob": "^8.0.0",
+    "@types/lodash": "^4.14.189",
     "@types/mocha": "^10.0.0",
     "@types/node": "16.x",
     "@types/vscode": "^1.73.0",

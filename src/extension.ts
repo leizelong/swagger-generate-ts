@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { generateDefinitions } from './commands/gen-definitions';
+import { initDefinitions } from './commands/init-definitions';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -14,9 +15,9 @@ export function activate(context: vscode.ExtensionContext) {
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	const extensionPath  = context.extensionPath;
-
-	let disposable = vscode.commands.registerCommand('swagger-generate-ts.definitions', generateDefinitions(extensionPath));
-	context.subscriptions.push(disposable);
+	const genServiceCmd = vscode.commands.registerCommand('swagger-generate-ts.gen-services', generateDefinitions(extensionPath));
+	const initDefinitionsCmd = vscode.commands.registerCommand('swagger-generate-ts.init-definitions', initDefinitions);
+	context.subscriptions.push(genServiceCmd, initDefinitionsCmd);
 }
 
 // This method is called when your extension is deactivated

@@ -263,11 +263,10 @@ export async function genDefinitions(
   }
 }
 
-export async function initDefinitions(ast: TsAst) {
+export async function genTotalDefinitions(ast: TsAst) {
   const source = print(ast);
   const projectRoot = getProjectRoot();
-  const filePath = path.resolve(projectRoot, "openApi.d.ts");
-  console.log("source", source);
+  const filePath = path.resolve(projectRoot, "definitions.d.ts");
 
   await fs.promises.writeFile(filePath, source.code, { encoding: "utf-8" });
 }

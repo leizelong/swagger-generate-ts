@@ -1,5 +1,9 @@
 import * as vscode from "vscode";
-import { generateTsFiles, loadWebView } from "../utils/common";
+import {
+  generateTsFiles,
+  getOpenApiJsonUrlOptions,
+  loadWebView,
+} from "../utils/common";
 
 /**
  * 输入swagger api url，生成Definitions文件
@@ -8,9 +12,7 @@ import { generateTsFiles, loadWebView } from "../utils/common";
  */
 export const generateDefinitions = (extensionPath: string) =>
   async function generateDefinitions() {
-    const openApiJsonUrlOptions: any = vscode.workspace
-      .getConfiguration("swagger-generate-ts")
-      .get("openApiJsonUrlOptions");
+    const openApiJsonUrlOptions: any = getOpenApiJsonUrlOptions();
     try {
       let panel: any;
 
