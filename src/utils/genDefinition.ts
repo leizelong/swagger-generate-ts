@@ -2,6 +2,8 @@ import * as fs from "fs";
 import { print, types } from "recast";
 import * as path from "path";
 import type { TSPropertySignature, File as TsAst } from "@babel/types";
+import * as Sentry from "@sentry/node";
+
 import {
   getApiDefinitionKeys,
   getDefinitionPathByUrl,
@@ -214,6 +216,7 @@ async function writeDefinitions(
       }
     }
     const code = print(ast).code;
+    Sentry.setExtra(`genDefinition => ${filePath}`, code);
     await fs.promises.writeFile(filePath, code, { encoding: "utf-8" });
   }
 

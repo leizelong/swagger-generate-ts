@@ -10,6 +10,9 @@ import {
   File as TsAst,
   ImportDeclaration,
 } from "@babel/types";
+import * as Sentry from "@sentry/node";
+import { namedTypes } from "ast-types";
+
 import {
   getApiDefinitionKeys,
   getExportNamedDeclaration,
@@ -21,7 +24,6 @@ import {
   protectKey,
   transformDefinitionKey,
 } from "./common";
-import { namedTypes } from "ast-types";
 
 /**
  * 初始化 import { post, get } from '@/utils/request';
@@ -226,8 +228,8 @@ async function generateFileByAst(ast: TsAst, filePath: string) {
     await fs.promises.mkdir(dirPath, { recursive: true });
   }
 
-  const code = print(ast, { quote: "single" }).code;
-  console.log("code", code);
+  const code = print(ast).code;
+  Sentry.setExtra(`genService => ${filePath}`, code);
   await fs.promises.writeFile(filePath, code, { encoding: "utf-8" });
 }
 

@@ -3,6 +3,7 @@
 'use strict';
 
 const path = require('path');
+const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 
 //@ts-check
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
@@ -49,5 +50,20 @@ const extensionConfig = {
   infrastructureLogging: {
     level: "log", // enables logging required for problem matchers
   },
+  plugins: [
+    new SentryWebpackPlugin({
+      // sentry-cli configuration - can also be done directly through sentry-cli
+      // see https://docs.sentry.io/product/cli/configuration/ for details
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      org: "leizl",
+      project: "swagger-generate-ts",
+      release: process.env.SENTRY_RELEASE,
+
+      // other SentryWebpackPlugin configuration
+      include: ".",
+      ignore: ["node_modules", "webpack.config.js"],
+      
+    }),
+  ],
 };
 module.exports = [ extensionConfig ];

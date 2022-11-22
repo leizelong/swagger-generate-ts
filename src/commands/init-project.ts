@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+import * as Sentry from "@sentry/node";
+
 import {
   generateTsFiles,
   getOpenApiData,
@@ -10,6 +12,10 @@ import {
  *
  */
 export async function initProject() {
+  const transaction = Sentry.startTransaction({
+    op: "init-project",
+    name: "initProjectTransaction",
+  });
   try {
     const openApiJsonUrl = await quickPickOpenApiJsonUrl();
     if (!openApiJsonUrl) {
@@ -29,8 +35,13 @@ export async function initProject() {
     const errMessages = [];
     // todo collect errMessages and write
     generateTsFiles({ openApiJsonUrl, routes: totalRoutes });
+    Sentry.captureMessage("init-project success", {
+      level: "info",
+    });
     vscode.window.showInformationMessage("初始化项目成功");
   } catch (error: any) {
     vscode.window.showErrorMessage(error.message);
+  } finally {
+    transaction.finish();
   }
 }

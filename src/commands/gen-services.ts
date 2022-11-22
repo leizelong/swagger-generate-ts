@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+import * as Sentry from "@sentry/node";
+
 import {
   generateTsFiles,
   getOpenApiJsonUrlOptions,
@@ -12,25 +14,40 @@ import {
  */
 export const generateServices = (extensionPath: string) =>
   async function _generateServices() {
+    const transaction = Sentry.startTransaction({
+      op: "gen-services",
+      name: "genServicesTransaction",
+    });
     const openApiJsonUrlOptions: any = getOpenApiJsonUrlOptions();
     try {
       let panel: any;
 
       function postMessage(data: SendData) {
         console.log("vscode => webview data", data);
+        Sentry.setExtra(
+          "vscode => webview data",
+          JSON.stringify(data, undefined, 2),
+        );
         panel?.webview?.postMessage?.(data);
       }
 
       const onReceiveMessage = async (receiveData: ReceiveData) => {
         console.log("webview => message data", receiveData);
+        Sentry.setExtra(
+          "webview => message data",
+          JSON.stringify(receiveData, undefined, 2),
+        );
         try {
           await generateTsFiles(receiveData);
+          Sentry.captureMessage("gen-services success", {
+            level: "info",
+          });
           postMessage({
             success: true,
             source: "vscode",
           });
         } catch (error: any) {
-          console.log("error", error);
+          Sentry.captureException(error);
           postMessage({
             errorMessage: error.message,
             success: false,
@@ -63,6 +80,9 @@ export const generateServices = (extensionPath: string) =>
         },
       });
     } catch (error: any) {
+      Sentry.captureException(error);
       vscode.window.showErrorMessage(error.message);
+    } finally {
+      transaction.finish();
     }
   };
