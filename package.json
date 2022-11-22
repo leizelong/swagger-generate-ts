@@ -55,7 +55,22 @@
       }
     }
   },
+  "npm": {
+    "publish": false
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "scripts": {
+    "postinstall": "husky install",
+    "prepare": "husky install",
     "preinstall": "yarn --cwd web-app",
     "vscode:prepublish": "npm run package",
     "build:web-view": "npm run build --prefix web-app",
@@ -67,10 +82,14 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "release": "release-it --npm.skipChecks",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 1"
   },
   "devDependencies": {
     "@babel/types": "^7.20.0",
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
     "@sentry/webpack-plugin": "^1.20.0",
     "@types/glob": "^8.0.0",
     "@types/lodash": "^4.14.189",
@@ -82,10 +101,15 @@
     "@vscode/test-electron": "^2.2.0",
     "ast-types": "^0.14.2",
     "babylon": "^6.18.0",
+    "conventional-changelog-cli": "^2.2.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^7.0.0",
     "eslint": "^8.26.0",
     "glob": "^8.0.3",
     "html-loader": "^4.2.0",
+    "husky": "^8.0.0",
     "mocha": "^10.1.0",
+    "release-it": "^15.5.0",
     "ts-loader": "^9.4.1",
     "typescript": "^4.8.4",
     "webpack": "^5.74.0",
