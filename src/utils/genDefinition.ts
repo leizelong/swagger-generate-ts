@@ -219,8 +219,9 @@ async function writeDefinitions(
     Sentry.setExtra(`genDefinition => ${filePath}`, code);
     await fs.promises.writeFile(filePath, code, { encoding: "utf-8" });
   }
-
-  await generateFile(dirPath, targetAst);
+  if (definitions.length) {
+    await generateFile(dirPath, targetAst);
+  }
 }
 
 export async function writeDefinitionFile(

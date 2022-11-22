@@ -111,16 +111,17 @@ function addDefinitionImportDeclaration(
     const specifiers = definitionKeys
       .filter(item => !!item)
       .map(key => importSpecifier(identifier(key)));
-
-    const dtoImportDeclaration = importDeclaration(
-      specifiers,
-      stringLiteral(importPath),
-    );
-    ast.program.body.splice(
-      lastImportNodeIdx + 1,
-      0,
-      dtoImportDeclaration as any,
-    );
+    if (specifiers.length) {
+      const dtoImportDeclaration = importDeclaration(
+        specifiers,
+        stringLiteral(importPath),
+      );
+      ast.program.body.splice(
+        lastImportNodeIdx + 1,
+        0,
+        dtoImportDeclaration as any,
+      );
+    }
   } else {
     const specifierKeys = getSpecifierKeys(targetImportNode);
     for (const definitionKey of definitionKeys) {
@@ -159,9 +160,7 @@ function insertMethod(
     operationsDeclaration,
     operationId,
   ).map(transformDefinitionKey);
-
   const importPath = getRelativeDefinitionPathByUrl(url);
-  // todo addDefinitionImportDeclaration
   addDefinitionImportDeclaration(ast, importPath, [
     reqDefinitionKey,
     resDefinitionKey,
