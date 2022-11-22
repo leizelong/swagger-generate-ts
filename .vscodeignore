@@ -12,9 +12,13 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 
-/definitions
+definitions/**
 **/mock/**
 web-app/**
 !web-app/build/**/*
 /media/**
 .config.json
+.versionrc
+.cz-config.js
+.husky/**
+.sentry*
