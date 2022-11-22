@@ -3,6 +3,11 @@
 ## Description
 * We can use this plugin to generate Ts declarations and Ts request files through Swagger Api Json
 
+## 所有的Commands
+* `SwaggerGenerateTs:生成Ts声明和Service请求` 打开WebView 自定义添加需要的路由
+* `SwaggerGenerateTs:初始化Definitions` 生成一份完整的definitions.d.ts文件
+* `SwaggerGenerateTs:初始化整个项目，生成Definitions+Services` 根据openJson初始化整个项目用到的路由接口类型和请求文件
+
 ## How to use it？
 
 ### step1: Configure the openApiJson List
