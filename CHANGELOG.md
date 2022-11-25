@@ -1,6 +1,20 @@
 # 更新历史 
 
 
+### [0.0.6](https://github.com/leizelong/swagger-generate-ts/compare/v0.0.5...v0.0.6) (2022-11-25)
+
+
+### 🐛 Bug Fixes | Bug 修复
+
+* 修复DefinitionKey 存在空白字符的问题 ([b580888](https://github.com/leizelong/swagger-generate-ts/commit/b580888401dea508a8b651abdbc0f84d8f662e00))
+* 修复openApi url返回为字符串的情况; 修复openApiJson basePath: / 的异常情况 ([bd5c348](https://github.com/leizelong/swagger-generate-ts/commit/bd5c348b8296aa401b6413ac438bce7ac9fca670))
+
+
+### 📦 Chores | 其他更新
+
+* 调整开发环境上报sentry日志 ([c9c03ff](https://github.com/leizelong/swagger-generate-ts/commit/c9c03ffac1d210aad30cff5f75ea5a391e1ce25e))
+* 添加环境变量 ([fb26ac6](https://github.com/leizelong/swagger-generate-ts/commit/fb26ac6eb3932345aa55b439a914cdd79321dfb4))
+
 ### 0.0.5 (2022-11-22)
 
 
