@@ -84,10 +84,6 @@ export async function loadWebView(
   return panel;
 }
 
-interface Config {
-  debug: boolean;
-}
-
 export function getConfig(extensionPath: string): Config {
   try {
     const configFilePath = path.resolve(extensionPath, ".config.json");

@@ -39,3 +39,7 @@ declare interface OpenApiJson {
   basePath: string;
   paths: RouteEntry;
 }
+
+declare interface Config {
+  debug: boolean;
+}
