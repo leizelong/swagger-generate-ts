@@ -12,6 +12,8 @@ import openapiTS from "openapi-typescript";
 import { genDefinitions } from "./genDefinition";
 import { genServices } from "./genService";
 import { jsKeyWordBlackList } from "../constants";
+//@ts-ignore
+import json5 from "json5";
 
 const axios = require("axios");
 
@@ -125,6 +127,25 @@ export async function getTargetAst(
   return { targetAst, fileExist };
 }
 
+export function safeParse(data: string | Record<string, any>) {
+  if (typeof data === "string") {
+    try {
+      const dataObj = json5.parse(data);
+      return dataObj;
+    } catch (error) {
+      return {};
+    }
+  }
+  return data;
+}
+
+function transformOpenApiJson(openApiJson: OpenApiJson) {
+  if (openApiJson.basePath === "/") {
+    openApiJson.basePath = "";
+  }
+  return openApiJson;
+}
+
 export async function fetchOpenApiJson(url: string): Promise<OpenApiJson> {
   // let openApiUrl =
   //   url ||
@@ -138,10 +159,11 @@ export async function fetchOpenApiJson(url: string): Promise<OpenApiJson> {
   // openApiUrl += `?timestamp=${new Date().getTime()}`;
   try {
     const res = await axios.get(url);
-    const openApiJson = res.data;
+    let openApiJson = safeParse(res.data);
     if (!openApiJson.swagger) {
       throw new Error("不是标准的openApiJson");
     }
+    openApiJson = transformOpenApiJson(openApiJson);
     return openApiJson;
   } catch (error: any) {
     throw new Error(`fetch openApiJsonUrl: ${url} failed: ${error.message}`);
@@ -332,7 +354,6 @@ export function getRelativeDefinitionPathByUrl(url: string) {
 export function getServicePathByUrl(url: string) {
   return getPath(url, "src/services", "index.ts");
 }
-
 
 export async function quickPickOpenApiJsonUrl() {
   const openApiJsonUrlOptions = getOpenApiJsonUrlOptions();
