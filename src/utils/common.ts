@@ -334,7 +334,7 @@ export function transformDefinitionKey(key: string | undefined) {
     return "";
   }
   key = protectKey(key);
-  return key.replace(/«/g, "").replace(/»/g, "");
+  return key.replace(/«/g, "").replace(/»/g, "").replace(/\s/g, "");
 }
 
 function getPath(url: string, prefix: string, suffix: string) {
