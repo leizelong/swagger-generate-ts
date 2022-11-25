@@ -67,7 +67,7 @@ function App() {
     return () => {
       window.removeEventListener("message", onMessage);
     };
-  }, []);
+  }, [form]);
 
   return (
     <div className="App">

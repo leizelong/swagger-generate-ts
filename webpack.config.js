@@ -5,19 +5,16 @@
 const path = require("path");
 const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 
-const idProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === "production";
 
 const sentryPlugin = new SentryWebpackPlugin({
   // sentry-cli configuration - can also be done directly through sentry-cli
   // see https://docs.sentry.io/product/cli/configuration/ for details
-  authToken: process.env.SENTRY_AUTH_TOKEN,
   org: "leizl",
   project: "swagger-generate-ts",
-  release: process.env.SENTRY_RELEASE,
-
   // other SentryWebpackPlugin configuration
   include: ".",
-  ignore: ["node_modules", "webpack.config.js"],
+  ignore: ["node_modules", "webpack.config.js", "web-app"],
 });
 
 //@ts-check
@@ -25,7 +22,7 @@ const sentryPlugin = new SentryWebpackPlugin({
 
 /** @type Plugins */
 let plugins = [];
-if (idProd) {
+if (isProd) {
   plugins = [sentryPlugin];
 }
 
@@ -50,7 +47,7 @@ const extensionConfig = {
   },
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
-    extensions: [".ts", ".js", ".html"],
+    extensions: [".ts", ".js"],
   },
   module: {
     rules: [
@@ -62,11 +59,6 @@ const extensionConfig = {
             loader: "ts-loader",
           },
         ],
-      },
-      {
-        test: /\.html$/,
-        exclude: /node_modules/,
-        loader: "html-loader",
       },
     ],
   },

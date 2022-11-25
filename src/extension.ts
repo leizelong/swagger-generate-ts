@@ -5,6 +5,8 @@ import { generateServices } from './commands/gen-services';
 import { initDefinitions } from './commands/init-definitions';
 import { initProject } from './commands/init-project';
 import "./sentry";
+import { initSentry } from './sentry';
+import { getConfig } from './utils/common';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -17,6 +19,8 @@ export function activate(context: vscode.ExtensionContext) {
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	const extensionPath  = context.extensionPath;
+	const config = getConfig(extensionPath);
+	initSentry(!config.debug);
 	const genServiceCmd = vscode.commands.registerCommand('swagger-generate-ts.gen-services', generateServices(extensionPath));
 
 	const initDefinitionsCmd = vscode.commands.registerCommand('swagger-generate-ts.init-definitions', initDefinitions);
