@@ -6,6 +6,8 @@ const path = require("path");
 const sentryWebpackPlugin = require("@sentry/webpack-plugin");
 
 const isProd = process.env.NODE_ENV === "production";
+// const packageJson = require("./package.json");
+// const release = `${packageJson.name}@${packageJson.version}`;
 
 const sentryPlugin = new sentryWebpackPlugin({
   // sentry-cli configuration - can also be done directly through sentry-cli
@@ -16,13 +18,14 @@ const sentryPlugin = new sentryWebpackPlugin({
   include: "./dist",
   authToken: "5a8832afed284ea6b9f630c1d192e9ff2788e41395014f2086764a62ab94e833",
   ignore: ["node_modules", "webpack.config.js", "web-app", ".cz-config.js"],
+  // release,
 });
 
 //@ts-check
 /** @typedef {import('webpack').Configuration['plugins']} Plugins **/
 
 /** @type Plugins */
-let plugins = [];
+let plugins = [sentryPlugin];
 if (isProd) {
   plugins = [sentryPlugin];
 }

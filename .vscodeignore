@@ -11,6 +11,8 @@ vsc-extension-quickstart.md
 **/.eslintrc.json
 **/*.map
 **/*.ts
+yarn.lock
+
 
 web-app/**
 # web-app/build/static/js/*.js.map

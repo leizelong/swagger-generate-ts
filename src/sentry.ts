@@ -7,8 +7,8 @@ import { getConfig, getPackageJson } from "./utils/common";
 const config = getConfig(path.dirname(__dirname));
 const isDebug = config.debug;
 const environment = isDebug ? "development" : "production";
-const packageJson = getPackageJson();
-const release = `${packageJson.name}@${packageJson.version}`;
+// const packageJson = getPackageJson();
+// const release = `${packageJson.name}@${packageJson.version}`;
 
 Sentry.init({
   dsn: "https://5b7a0b6725ca464aa57838df9e95d154@o544584.ingest.sentry.io/4504196969398272",
@@ -19,7 +19,7 @@ Sentry.init({
   tracesSampleRate: 1.0,
   normalizeDepth: 6,
   environment,
-  release,
+  // release,
   enabled: !isDebug,
   // enabled: true,
 });
