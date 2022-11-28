@@ -56,7 +56,7 @@ export async function loadWebView(
   const isDebug = config.debug;
 
   async function loadRemoteHtml() {
-    const { data: html } = await axios.get("http://localhost:3000");
+    const { data: html } = await axios.get("http://localhost:3000/$root");
     panel.webview.html = html.replace(
       /\/\$root/g,
       "http://localhost:3000/$root",
@@ -363,4 +363,32 @@ export async function quickPickOpenApiJsonUrl() {
     placeHolder: "select openApiJsonUrl",
   });
   return data?.value;
+}
+
+export function getPackageJson(): PackageJson {
+  try {
+    const fileStr = fs.readFileSync(
+      path.join(path.dirname(__dirname), "package.json"),
+      {
+        encoding: "utf8",
+      },
+    );
+    return JSON.parse(fileStr);
+  } catch (error) {
+    return {} as PackageJson;
+  }
+}
+
+export async function getTotalRoutesByUrl(openApiJsonUrl: string) {
+  const openApiJson = await fetchOpenApiJson(openApiJsonUrl);
+  const { basePath, paths } = openApiJson;
+
+  let totalRoutes: Route[] = [];
+  for (const [path, methodEntry] of Object.entries(paths)) {
+    const url = basePath + path;
+    for (const method of Object.keys(methodEntry)) {
+      totalRoutes.push({ url, method } as Route);
+    }
+  }
+  return totalRoutes;
 }

@@ -243,12 +243,12 @@ export async function writeDefinitionFile(
 }
 
 export async function genDefinitions(
-  routes: ChannelData["routes"],
+  routes: ReceiveData["routes"],
   openApiData: OpenApiData,
 ) {
   const { openApiJson, openApiAst } = openApiData;
 
-  async function genDefinitionByRoute(route: ChannelData["routes"][0]) {
+  async function genDefinitionByRoute(route: ReceiveData["routes"][0]) {
     /**
      * {
           url: "/admin/media/refluxCategory/addCategoryBinding",

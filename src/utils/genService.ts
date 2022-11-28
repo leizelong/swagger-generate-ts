@@ -233,8 +233,8 @@ async function generateFileByAst(ast: TsAst, filePath: string) {
 }
 
 async function genService(
-  route: ChannelData["routes"][0],
-  servicePath: ChannelData["servicePath"],
+  route: ReceiveData["routes"][0],
+  servicePath: ReceiveData["servicePath"],
   operationsDeclaration: TSInterfaceDeclaration,
   openApiJson: OpenApiJson,
 ) {
@@ -250,11 +250,11 @@ async function genService(
 }
 
 export async function genServices(
-  channelData: ReceiveData,
+  receiveData: ReceiveData,
   openApiData: OpenApiData,
 ) {
   const { openApiJson, openApiAst } = openApiData;
-  const { servicePath, routes } = channelData;
+  const { servicePath, routes } = receiveData;
   // const projectRoot = getProjectRoot();
   // const { targetAst: testAst } = await getTargetAst(
   //   path.resolve(projectRoot, "src/services/test.ts"),

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Select, Button, Row, Col, Space, message } from "antd";
+import { Form, Select, Input, Button, Row, Col, Space, message } from "antd";
+import type { SelectProps } from "antd";
+
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./App.css";
 import "antd/dist/antd.css";
 
 interface ChannelData {
-  routes: { method: string; url: string }[];
+  routes?: { method: string; url: string }[];
   openApiJsonUrl: string;
+  source: "webview";
+  type: "submit" | "info";
 }
 interface VsCodeMessage {
   errorMessage?: string;
@@ -14,7 +18,8 @@ interface VsCodeMessage {
   source: string;
   type: "init-config";
   config: {
-    openApiJsonUrlOptions: any[];
+    openApiJsonUrlOptions: SelectProps["options"];
+    routesOptions?: SelectProps["options"];
     formData?: ChannelData;
   };
 }
@@ -32,15 +37,32 @@ try {
   console.log("acquireVsCodeApiError");
 }
 
+function encodeMessageData(
+  data: any,
+  options?: { type: ChannelData["type"] },
+): ChannelData {
+  return Object.assign(data || {}, {
+    source: "webview",
+    type: options.type || "info",
+  });
+}
+
 function App() {
   const [form] = Form.useForm<Partial<ChannelData>>();
-  const [openApiJsonUrlOptions, setOpenApiJsonUrlOptions] = useState<any[]>([]);
+  const [openApiJsonUrlOptions, setOpenApiJsonUrlOptions] = useState<
+    SelectProps["options"]
+  >([]);
+
+  // const [routesOptions, setRoutesOptions] = useState<SelectProps["options"]>(
+  //   [],
+  // );
+
   async function onSubmit() {
     await form.validateFields();
     console.log("form", form.getFieldsValue());
     const data = form.getFieldsValue();
     data.routes = data.routes?.map(({ method, url }) => ({ method, url }));
-    vscode.postMessage(data);
+    vscode.postMessage(encodeMessageData(data, { type: "submit" }));
   }
 
   useEffect(() => {
@@ -48,8 +70,13 @@ function App() {
       const data = event.data; // The JSON data our extension sent
       if (data.source !== "vscode") return;
       if (data.type === "init-config") {
-        const { openApiJsonUrlOptions, formData } = data.config;
-        setOpenApiJsonUrlOptions(openApiJsonUrlOptions);
+        const { openApiJsonUrlOptions, routesOptions, formData } = data.config;
+        if (openApiJsonUrlOptions) {
+          setOpenApiJsonUrlOptions(openApiJsonUrlOptions);
+        }
+        if (routesOptions) {
+          // setRoutesOptions(routesOptions);
+        }
         if (formData) {
           form.setFieldsValue(formData);
         }
@@ -69,6 +96,12 @@ function App() {
     };
   }, [form]);
 
+  // function handleOpenJsonUrlSelect(url: string) {
+  //   vscode.postMessage(
+  //     encodeMessageData({ openApiJsonUrl: url }, { type: "info" }),
+  //   );
+  // }
+
   return (
     <div className="App">
       <Row justify="center">
@@ -87,7 +120,12 @@ function App() {
               rules={[{ required: true, message: "openApiJsonUrl必填" }]}
             >
               {/* <Input></Input> */}
-              <Select options={openApiJsonUrlOptions}></Select>
+              <Select
+                showSearch
+                allowClear
+                options={openApiJsonUrlOptions}
+                // onSelect={handleOpenJsonUrlSelect}
+              ></Select>
             </Form.Item>
 
             <Form.Item label="填写路由方法和路径">
@@ -103,12 +141,10 @@ function App() {
                           // noStyle
                           {...field}
                           name={[field.name, "method"]}
-                          // label="method"
                           rules={[{ required: true }]}
                           initialValue="post"
                         >
                           <Select
-                            // disabled={!form.getFieldValue("area")}
                             style={{ width: 100 }}
                             options={methodsOptions}
                           ></Select>
@@ -120,6 +156,12 @@ function App() {
                           // label="url"
                           rules={[{ required: true }]}
                         >
+                          {/* <Select
+                            showSearch
+                            allowClear
+                            options={routesOptions}
+                            placeholder="接口请求路径: /admin/media/refluxCategory/addPropertyBinding"
+                          ></Select> */}
                           <Input
                             style={{ width: 400 }}
                             placeholder="接口请求路径: /admin/media/refluxCategory/addPropertyBinding"

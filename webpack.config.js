@@ -3,18 +3,19 @@
 "use strict";
 
 const path = require("path");
-const SentryWebpackPlugin = require("@sentry/webpack-plugin");
+const sentryWebpackPlugin = require("@sentry/webpack-plugin");
 
 const isProd = process.env.NODE_ENV === "production";
 
-const sentryPlugin = new SentryWebpackPlugin({
+const sentryPlugin = new sentryWebpackPlugin({
   // sentry-cli configuration - can also be done directly through sentry-cli
   // see https://docs.sentry.io/product/cli/configuration/ for details
   org: "leizl",
   project: "swagger-generate-ts",
   // other SentryWebpackPlugin configuration
-  include: ".",
-  ignore: ["node_modules", "webpack.config.js", "web-app"],
+  include: "./dist",
+  authToken: "5a8832afed284ea6b9f630c1d192e9ff2788e41395014f2086764a62ab94e833",
+  ignore: ["node_modules", "webpack.config.js", "web-app", ".cz-config.js"],
 });
 
 //@ts-check

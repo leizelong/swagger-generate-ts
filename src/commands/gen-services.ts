@@ -2,8 +2,11 @@ import * as vscode from "vscode";
 import * as Sentry from "@sentry/node";
 
 import {
+  fetchOpenApiJson,
   generateTsFiles,
+  getOpenApiData,
   getOpenApiJsonUrlOptions,
+  getTotalRoutesByUrl,
   loadWebView,
 } from "../utils/common";
 
@@ -18,40 +21,59 @@ export const generateServices = (extensionPath: string) =>
       op: "gen-services",
       name: "genServicesTransaction",
     });
+    const chatMessages: any = [];
     const openApiJsonUrlOptions: any = getOpenApiJsonUrlOptions();
+    const vscodeMsgKey = "vscode => webview data";
+    const webviewMsgKey = "webview => webview data";
     try {
       let panel: any;
 
-      function postMessage(data: SendData) {
-        console.log("vscode => webview data", data);
-        Sentry.setExtra(
-          "vscode => webview data",
-          JSON.stringify(data, undefined, 2),
-        );
-        panel?.webview?.postMessage?.(data);
+      function postMessage(originSendData: Omit<SendData, "source">) {
+        const sendData = Object.assign(originSendData, { source: "vscode" });
+        console.log(vscodeMsgKey, sendData);
+        chatMessages.push(sendData);
+        Sentry.setExtra("chatMessages", chatMessages);
+        panel?.webview?.postMessage?.(sendData);
+      }
+
+      async function onOpenJsonUrlChange(openApiJsonUrl: string) {
+        const totalRoutes = await getTotalRoutesByUrl(openApiJsonUrl);
+        const routesOptions = totalRoutes.map(({ url }) => {
+          return {
+            label: url,
+            value: url,
+          };
+        });
+
+        postMessage({
+          type: "init-config",
+          config: { routesOptions },
+        });
       }
 
       const onReceiveMessage = async (receiveData: ReceiveData) => {
-        console.log("webview => message data", receiveData);
-        Sentry.setExtra(
-          "webview => message data",
-          JSON.stringify(receiveData, undefined, 2),
-        );
+        console.log(webviewMsgKey, receiveData);
+        chatMessages.push(receiveData);
+
+        Sentry.setExtra("chatMessages", chatMessages);
         try {
-          await generateTsFiles(receiveData);
+          if (receiveData.type === "submit") {
+            await generateTsFiles(receiveData);
+          } else if (receiveData.type === "info") {
+            // await onOpenJsonUrlChange(receiveData.openApiJsonUrl);
+          }
+
           Sentry.captureMessage("gen-services success", {
             level: "info",
           });
           postMessage({
             success: true,
-            source: "vscode",
           });
         } catch (error: any) {
           Sentry.captureException(error);
           postMessage({
             errorMessage: error.message,
             success: false,
-            source: "vscode",
           });
         }
       };
@@ -72,7 +94,6 @@ export const generateServices = (extensionPath: string) =>
       panel = await loadWebView(onReceiveMessage, extensionPath);
 
       postMessage({
-        source: "vscode",
         type: "init-config",
         config: {
           openApiJsonUrlOptions,

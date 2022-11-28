@@ -9,7 +9,8 @@ declare interface SendData {
   success?: boolean;
   type?: "init-config";
   config?: {
-    openApiJsonUrlOptions: Array<{ label: string; value: string }>;
+    openApiJsonUrlOptions?: Array<{ label: string; value: string }>;
+    routesOptions?: Array<{ label: string; value: string }>;
     formData?: Partial<ReceiveData>;
   };
   source: "vscode";
@@ -22,9 +23,12 @@ declare interface ReceiveData {
   servicePath?: string;
   openApiJsonUrl: string;
   routes: Route[];
+  type?: "submit" | "info";
+  // source?: "webview";
 }
+
 /** webView 通信数据源 */
-declare type ChannelData = SendData & ReceiveData;
+declare type ChannelData = SendData & Omit<ReceiveData, "source" | "type">;
 
 type RouteEntry = Record<
   string,
@@ -42,4 +46,9 @@ declare interface OpenApiJson {
 
 declare interface Config {
   debug: boolean;
+}
+
+declare interface PackageJson {
+  version: string;
+  name: string;
 }

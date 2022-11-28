@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/node";
 
 import {
   generateTsFiles,
-  getOpenApiData,
+  getTotalRoutesByUrl,
   quickPickOpenApiJsonUrl,
 } from "../utils/common";
 
@@ -21,16 +21,8 @@ export async function initProject() {
     if (!openApiJsonUrl) {
       return;
     }
-    const { openApiJson } = await getOpenApiData(openApiJsonUrl);
-    const { basePath, paths } = openApiJson;
 
-    let totalRoutes = [];
-    for (const [path, methodEntry] of Object.entries(paths)) {
-      const url = basePath + path;
-      for (const method of Object.keys(methodEntry)) {
-        totalRoutes.push({ url, method } as Route);
-      }
-    }
+    const totalRoutes = await getTotalRoutesByUrl(openApiJsonUrl);
 
     const errMessages = [];
     // todo collect errMessages and write
