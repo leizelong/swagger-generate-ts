@@ -17,7 +17,8 @@ const sentryPlugin = new sentryWebpackPlugin({
   // other SentryWebpackPlugin configuration
   include: "./dist",
   authToken: "5a8832afed284ea6b9f630c1d192e9ff2788e41395014f2086764a62ab94e833",
-  ignore: ["node_modules", "webpack.config.js", "web-app", ".cz-config.js"],
+  // ignore: ["node_modules", "webpack.config.js", "web-app", ".cz-config.js"],
+  ignore: ["node_modules", "webpack.config.js", ".cz-config.js"],
   // release,
 });
 
@@ -25,7 +26,7 @@ const sentryPlugin = new sentryWebpackPlugin({
 /** @typedef {import('webpack').Configuration['plugins']} Plugins **/
 
 /** @type Plugins */
-let plugins = [sentryPlugin];
+let plugins = [];
 if (isProd) {
   plugins = [sentryPlugin];
 }

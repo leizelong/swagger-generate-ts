@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Form, Select, Input, Button, Row, Col, Space, message } from "antd";
+import {
+  Form,
+  Select,
+  Button,
+  Row,
+  Col,
+  Space,
+  message,
+  AutoComplete,
+} from "antd";
 import type { SelectProps } from "antd";
 
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -41,7 +50,7 @@ function encodeMessageData(
   data: any,
   options?: { type: ChannelData["type"] },
 ): ChannelData {
-  return Object.assign(data || {}, {
+  return Object.assign({}, data, {
     source: "webview",
     type: options.type || "info",
   });
@@ -53,9 +62,9 @@ function App() {
     SelectProps["options"]
   >([]);
 
-  // const [routesOptions, setRoutesOptions] = useState<SelectProps["options"]>(
-  //   [],
-  // );
+  const [routesOptions, setRoutesOptions] = useState<SelectProps["options"]>(
+    [],
+  );
 
   async function onSubmit() {
     await form.validateFields();
@@ -75,7 +84,7 @@ function App() {
           setOpenApiJsonUrlOptions(openApiJsonUrlOptions);
         }
         if (routesOptions) {
-          // setRoutesOptions(routesOptions);
+          setRoutesOptions(routesOptions);
         }
         if (formData) {
           form.setFieldsValue(formData);
@@ -96,17 +105,17 @@ function App() {
     };
   }, [form]);
 
-  // function handleOpenJsonUrlSelect(url: string) {
-  //   vscode.postMessage(
-  //     encodeMessageData({ openApiJsonUrl: url }, { type: "info" }),
-  //   );
-  // }
+  function handleOpenJsonUrlSelect(url: string) {
+    vscode.postMessage(
+      encodeMessageData({ openApiJsonUrl: url }, { type: "info" }),
+    );
+  }
 
   return (
     <div className="App">
       <Row justify="center">
         <Col span={16}>
-          <h2>Swagger Api Generate Service File</h2>
+          <h2 className="title">Swagger Api Generate Service File</h2>
           <Form
             form={form}
             title="生成路由"
@@ -119,12 +128,11 @@ function App() {
               label="openApiJsonUrl"
               rules={[{ required: true, message: "openApiJsonUrl必填" }]}
             >
-              {/* <Input></Input> */}
               <Select
                 showSearch
                 allowClear
                 options={openApiJsonUrlOptions}
-                // onSelect={handleOpenJsonUrlSelect}
+                onSelect={handleOpenJsonUrlSelect}
               ></Select>
             </Form.Item>
 
@@ -132,13 +140,12 @@ function App() {
               <Form.List name="routes">
                 {(fields, { add, remove }) => (
                   <>
-                    {fields.map(field => (
+                    {fields.map((field, idx) => (
                       <Space.Compact
                         style={{ display: "flex" }}
                         key={field.key}
                       >
                         <Form.Item
-                          // noStyle
                           {...field}
                           name={[field.name, "method"]}
                           rules={[{ required: true }]}
@@ -151,27 +158,19 @@ function App() {
                         </Form.Item>
                         <Form.Item
                           {...field}
-                          // noStyle
+                          style={{ flex: 1 }}
+                          className="route-item"
                           name={[field.name, "url"]}
-                          // label="url"
                           rules={[{ required: true }]}
                         >
-                          {/* <Select
-                            showSearch
-                            allowClear
+                          <AutoComplete
+                            placeholder="接口请求路径: /admin/media/xx"
                             options={routesOptions}
-                            placeholder="接口请求路径: /admin/media/refluxCategory/addPropertyBinding"
-                          ></Select> */}
-                          <Input
-                            style={{ width: 400 }}
-                            placeholder="接口请求路径: /admin/media/refluxCategory/addPropertyBinding"
-                          />
+                            allowClear
+                            filterOption
+                            optionFilterProp={"value"}
+                          ></AutoComplete>
                         </Form.Item>
-                        {/* </div> */}
-
-                        {/* <MinusCircleOutlined
-                          onClick={() => remove(field.name)}
-                        /> */}
                         <Button
                           type="text"
                           danger

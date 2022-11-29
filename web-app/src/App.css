@@ -3,6 +3,13 @@
   margin-top: 20px;
 }
 
+html {
+  background-color: #fff;
+}
+.title {
+  color: #333;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

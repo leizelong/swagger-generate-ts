@@ -29,7 +29,9 @@ export const generateServices = (extensionPath: string) =>
       let panel: any;
 
       function postMessage(originSendData: Omit<SendData, "source">) {
-        const sendData = Object.assign(originSendData, { source: "vscode" });
+        const sendData = Object.assign({}, originSendData, {
+          source: "vscode",
+        });
         console.log(vscodeMsgKey, sendData);
         chatMessages.push(sendData);
         Sentry.setExtra("chatMessages", chatMessages);
@@ -56,19 +58,23 @@ export const generateServices = (extensionPath: string) =>
         chatMessages.push(receiveData);
 
         Sentry.setExtra("chatMessages", chatMessages);
+
         try {
           if (receiveData.type === "submit") {
             await generateTsFiles(receiveData);
           } else if (receiveData.type === "info") {
-            // await onOpenJsonUrlChange(receiveData.openApiJsonUrl);
+            await onOpenJsonUrlChange(receiveData.openApiJsonUrl);
           }
 
           Sentry.captureMessage("gen-services success", {
             level: "info",
           });
-          postMessage({
-            success: true,
-          });
+
+          if (receiveData.type === "submit") {
+            postMessage({
+              success: true,
+            });
+          }
         } catch (error: any) {
           Sentry.captureException(error);
           postMessage({
