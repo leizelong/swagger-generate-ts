@@ -4,7 +4,7 @@ import type { SelectProps } from "antd";
 
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./App.css";
-import "antd/dist/antd.css";
+import "antd/dist/reset.css";
 
 interface ChannelData {
   routes?: { method: string; url: string }[];
