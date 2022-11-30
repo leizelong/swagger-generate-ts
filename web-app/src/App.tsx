@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Form,
   Select,
@@ -10,13 +10,18 @@ import {
   AutoComplete,
 } from "antd";
 import type { SelectProps } from "antd";
-
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-import "./App.css";
 import "antd/dist/reset.css";
+import { debounce } from "lodash";
+
+import "./App.css";
 
 interface ChannelData {
-  routes?: { method: string; url: string }[];
+  routes?: {
+    method: string;
+    url: string;
+    methodsOptions?: SelectProps["options"];
+  }[];
   openApiJsonUrl: string;
   source: "webview";
   type: "submit" | "info";
@@ -28,7 +33,7 @@ interface VsCodeMessage {
   type: "init-config";
   config: {
     openApiJsonUrlOptions: SelectProps["options"];
-    routesOptions?: SelectProps["options"];
+    routesOptions?: SelectProps["options"] & { methods: string[] };
     formData?: ChannelData;
   };
 }
@@ -58,13 +63,16 @@ function encodeMessageData(
 
 function App() {
   const [form] = Form.useForm<Partial<ChannelData>>();
+
   const [openApiJsonUrlOptions, setOpenApiJsonUrlOptions] = useState<
     SelectProps["options"]
   >([]);
+  const [curOpenUrl, setCurOpenUrl] = useState("");
 
   const [routesOptions, setRoutesOptions] = useState<SelectProps["options"]>(
     [],
   );
+  const routeMethodsMap = useRef<Map<string | number, string[]>>(new Map());
 
   async function onSubmit() {
     await form.validateFields();
@@ -73,6 +81,48 @@ function App() {
     data.routes = data.routes?.map(({ method, url }) => ({ method, url }));
     vscode.postMessage(encodeMessageData(data, { type: "submit" }));
   }
+
+  function handleOpenJsonUrlSelect(url: string) {
+    if (url === curOpenUrl) return;
+    setCurOpenUrl(url);
+    setRoutesOptions([]);
+    routeMethodsMap.current.clear();
+    vscode.postMessage(
+      encodeMessageData({ openApiJsonUrl: url }, { type: "info" }),
+    );
+  }
+
+  const handleUrlChange = useCallback(
+    (fieldKey: any) => {
+      return debounce(value => {
+        if (!value) {
+          return;
+        }
+        const curRouteMethods = routeMethodsMap.current.get(value);
+        const nextRoutes = [...form.getFieldValue("routes")];
+
+        if (!curRouteMethods?.length) {
+          // 没有匹配上
+          nextRoutes[fieldKey].methodsOptions = methodsOptions;
+          form.setFieldValue("routes", nextRoutes);
+          return;
+        }
+
+        if (curRouteMethods.length === 1) {
+          nextRoutes[fieldKey].method = curRouteMethods[0];
+        }
+        const options = methodsOptions.map(option => {
+          const exist = curRouteMethods.includes(option.value);
+          return { ...option, disabled: !exist };
+        });
+
+        nextRoutes[fieldKey].methodsOptions = options;
+
+        form.setFieldValue("routes", nextRoutes);
+      }, 300);
+    },
+    [form],
+  );
 
   useEffect(() => {
     function onMessage(event: { data: VsCodeMessage }) {
@@ -85,6 +135,9 @@ function App() {
         }
         if (routesOptions) {
           setRoutesOptions(routesOptions);
+          for (const { value, methods } of routesOptions) {
+            routeMethodsMap.current.set(value, methods);
+          }
         }
         if (formData) {
           form.setFieldsValue(formData);
@@ -105,11 +158,7 @@ function App() {
     };
   }, [form]);
 
-  function handleOpenJsonUrlSelect(url: string) {
-    vscode.postMessage(
-      encodeMessageData({ openApiJsonUrl: url }, { type: "info" }),
-    );
-  }
+  const routes = Form.useWatch("routes", form);
 
   return (
     <div className="App">
@@ -140,7 +189,7 @@ function App() {
               <Form.List name="routes">
                 {(fields, { add, remove }) => (
                   <>
-                    {fields.map((field, idx) => (
+                    {fields.map(field => (
                       <Space.Compact
                         style={{ display: "flex" }}
                         key={field.key}
@@ -153,7 +202,11 @@ function App() {
                         >
                           <Select
                             style={{ width: 100 }}
-                            options={methodsOptions}
+                            options={
+                              (routes?.[field.key].url &&
+                                routes?.[field.key]?.methodsOptions) ||
+                              methodsOptions
+                            }
                           ></Select>
                         </Form.Item>
                         <Form.Item
@@ -168,7 +221,8 @@ function App() {
                             options={routesOptions}
                             allowClear
                             filterOption
-                            optionFilterProp={"value"}
+                            optionFilterProp="value"
+                            onChange={handleUrlChange(field.key)}
                           ></AutoComplete>
                         </Form.Item>
                         <Button

@@ -182,7 +182,7 @@ function insertMethod(
   );
   const argsNodes: any[] = [templateLiteral([tempNode], [])];
 
-  if (bodyDefinitionKey) {
+  if (bodyDto) {
     argsNodes.push(identifier(bodyKey));
   }
   const returnNode = returnStatement(
@@ -198,11 +198,17 @@ function insertMethod(
     fnParamsNodes.push(queryParamNode);
   }
 
-  if (bodyDefinitionKey) {
+  if (bodyDto) {
     const dataParamNode = identifier(bodyKey);
-    dataParamNode.typeAnnotation = tsTypeAnnotation(
-      tsTypeReference(identifier(bodyDefinitionKey)),
-    );
+    if (bodyDto.definitionsKey) {
+      dataParamNode.typeAnnotation = tsTypeAnnotation(
+        tsTypeReference(identifier(bodyDefinitionKey)),
+      );
+    } else {
+      dataParamNode.typeAnnotation = bodyDto.tSPropertySignature
+        .typeAnnotation as any;
+    }
+
     fnParamsNodes.push(dataParamNode);
   }
 
@@ -211,13 +217,19 @@ function insertMethod(
     fnParamsNodes,
     fnNode,
   );
-  if (resDefinitionKey) {
+  // todo 考虑 resDto
+  if (resDto) {
+    let resTypeAnnotation: types.namedTypes.TSTypeReference;
+    if (resDto.definitionsKey) {
+      resTypeAnnotation = tsTypeReference(identifier(resDefinitionKey));
+    } else {
+      resTypeAnnotation = resDto.tSPropertySignature.typeAnnotation as any;
+    }
+
     fnDeclaration.returnType = tsTypeAnnotation(
       tsTypeReference(
         identifier("Promise"),
-        tsTypeParameterInstantiation([
-          tsTypeReference(identifier(resDefinitionKey)),
-        ]),
+        tsTypeParameterInstantiation([resTypeAnnotation]),
       ),
     );
   }

@@ -2,9 +2,7 @@ import * as vscode from "vscode";
 import * as Sentry from "@sentry/node";
 
 import {
-  fetchOpenApiJson,
   generateTsFiles,
-  getOpenApiData,
   getOpenApiJsonUrlOptions,
   getTotalRoutesByUrl,
   loadWebView,
@@ -39,11 +37,12 @@ export const generateServices = (extensionPath: string) =>
       }
 
       async function onOpenJsonUrlChange(openApiJsonUrl: string) {
-        const totalRoutes = await getTotalRoutesByUrl(openApiJsonUrl);
-        const routesOptions = totalRoutes.map(({ url }) => {
+        const { urlRoutes } = await getTotalRoutesByUrl(openApiJsonUrl);
+        const routesOptions = urlRoutes.map(({ url, methods }) => {
           return {
             label: url,
             value: url,
+            methods,
           };
         });
 

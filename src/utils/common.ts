@@ -271,7 +271,7 @@ export function getApiDefinitionKeys(
             "parameters",
             "body",
             // "request",
-            /.*\b(request)|(param)|(req)\b/i, // 乱七八糟的key
+            /.*(request)|(param)|(req)\b/i, // 乱七八糟的key
           ]);
 
           const getBodyDto = findOperationsDefinitionsKey(node, [
@@ -442,12 +442,16 @@ export async function getTotalRoutesByUrl(openApiJsonUrl: string) {
   const openApiJson = await fetchOpenApiJson(openApiJsonUrl);
   const { basePath, paths } = openApiJson;
 
-  let totalRoutes: Route[] = [];
+  const totalRoutes: Route[] = [];
+  const urlRoutes: { url: string; methods: string[] }[] = [];
+
   for (const [path, methodEntry] of Object.entries(paths)) {
     const url = basePath + path;
+    const methods = Object.keys(methodEntry);
+    urlRoutes.push({ url, methods });
     for (const method of Object.keys(methodEntry)) {
       totalRoutes.push({ url, method } as Route);
     }
   }
-  return totalRoutes;
+  return { totalRoutes, urlRoutes };
 }

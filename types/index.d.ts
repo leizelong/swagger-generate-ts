@@ -10,7 +10,7 @@ declare interface SendData {
   type?: "init-config";
   config?: {
     openApiJsonUrlOptions?: Array<{ label: string; value: string }>;
-    routesOptions?: Array<{ label: string; value: string }>;
+    routesOptions?: Array<{ label: string; value: string; methods: string[] }>;
     formData?: Partial<ReceiveData>;
   };
   source: "vscode";

@@ -17,7 +17,7 @@ Sentry.init({
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
   tracesSampleRate: 1.0,
-  normalizeDepth: 4,
+  normalizeDepth: 6,
   environment,
   // release,
   enabled: !isDebug,

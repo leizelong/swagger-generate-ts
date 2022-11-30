@@ -22,7 +22,7 @@ export async function initProject() {
       return;
     }
 
-    const totalRoutes = await getTotalRoutesByUrl(openApiJsonUrl);
+    const { totalRoutes } = await getTotalRoutesByUrl(openApiJsonUrl);
 
     const errMessages = [];
     // todo collect errMessages and write
