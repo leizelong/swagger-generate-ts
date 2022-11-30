@@ -87,12 +87,13 @@ export const generateServices = (extensionPath: string) =>
       // const formData: ReceiveData = {
       //   routes: [
       //     {
-      //       url: "/gmp-product-library-portal/library/manage/region/listV2",
+      //       url: "/library/manage/item/{platform}/{channel}/itemList",
       //       method: "post",
       //     },
       //   ],
       //   openApiJsonUrl:
       //     "http://api.test.bbmall.xyb2b.com.cn/gmp-product-library-portal/v2/api-docs",
+      //   type: "submit",
       // };
       // onReceiveMessage(formData);
       // return;

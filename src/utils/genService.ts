@@ -14,6 +14,8 @@ import * as Sentry from "@sentry/node";
 import { namedTypes } from "ast-types";
 
 import {
+  formatFunctionName,
+  formatTemplateUrl,
   getApiDefinitionKeys,
   getExportNamedDeclaration,
   getMethodOperationId,
@@ -156,35 +158,54 @@ function insertMethod(
   } = types.builders;
 
   const operationId = getMethodOperationId(openApiJson, url, method);
-  const [reqDefinitionKey, resDefinitionKey] = getApiDefinitionKeys(
+  const [queryDto, bodyDto, resDto] = getApiDefinitionKeys(
     operationsDeclaration,
     operationId,
-  ).map(transformDefinitionKey);
+  );
+  const importKeys = [bodyDto, resDto].map(item => item?.definitionsKey);
+  const [bodyDefinitionKey, resDefinitionKey] = importKeys.map(
+    transformDefinitionKey,
+  );
   const importPath = getRelativeDefinitionPathByUrl(url);
   addDefinitionImportDeclaration(ast, importPath, [
-    reqDefinitionKey,
+    bodyDefinitionKey,
     resDefinitionKey,
   ]);
 
-  const paramKey = "data";
-  const exportFunctionName = url.replace(/\/.*\/(.*)/, "$1");
-  const tempNode = templateElement({ cooked: url, raw: url }, true);
+  const bodyKey = "data";
+  const queryKey = "query";
+  const [exportFunctionName, queryPaths] = formatFunctionName(url);
+  let templateUrl = formatTemplateUrl(url, queryKey, !!queryPaths?.length);
+  const tempNode = templateElement(
+    { cooked: templateUrl, raw: templateUrl },
+    true,
+  );
   const argsNodes: any[] = [templateLiteral([tempNode], [])];
-  if (reqDefinitionKey) {
-    argsNodes.push(identifier(paramKey));
+
+  if (bodyDefinitionKey) {
+    argsNodes.push(identifier(bodyKey));
   }
   const returnNode = returnStatement(
     callExpression(identifier(protectKey(method)), argsNodes),
   );
   const fnNode = blockStatement([returnNode]);
-  const dataParamNode = identifier(paramKey);
-  if (reqDefinitionKey) {
-    dataParamNode.typeAnnotation = tsTypeAnnotation(
-      tsTypeReference(identifier(reqDefinitionKey)),
-    );
+
+  const fnParamsNodes: any[] = [];
+  if (queryDto) {
+    const queryParamNode = identifier(queryKey);
+    queryParamNode.typeAnnotation = queryDto.tSPropertySignature
+      .typeAnnotation as any;
+    fnParamsNodes.push(queryParamNode);
   }
 
-  const fnParamsNodes = reqDefinitionKey ? [dataParamNode] : [];
+  if (bodyDefinitionKey) {
+    const dataParamNode = identifier(bodyKey);
+    dataParamNode.typeAnnotation = tsTypeAnnotation(
+      tsTypeReference(identifier(bodyDefinitionKey)),
+    );
+    fnParamsNodes.push(dataParamNode);
+  }
+
   const fnDeclaration = functionDeclaration(
     identifier(protectKey(exportFunctionName)),
     fnParamsNodes,

@@ -186,7 +186,6 @@ function equalNamePath(
   targetName: string | number,
 ) {
   if (Object.prototype.toString.call(sourceName) === "[object RegExp]") {
-    console.log("sourceName", sourceName, targetName);
     return (sourceName as RegExp).test(targetName as string);
   }
   return sourceName === targetName;
@@ -243,13 +242,13 @@ function findOperationsDefinitionsKey(
       return;
     }
   }
-  const result = root === node ? undefined : root;
+  const result: TSPropertySignature = root === node ? undefined : root;
   if (!result) {
     return;
   }
 
   const definitionsKey = findDefinitionsKey(result);
-  return definitionsKey;
+  return { definitionsKey, tSPropertySignature: result };
 }
 
 export function getApiDefinitionKeys(
@@ -261,19 +260,35 @@ export function getApiDefinitionKeys(
       if (node.key.type === "Identifier") {
         const { name } = node.key;
         if (operationId === name) {
-          // todo hit; reqDto; resDto; query情况暂未考虑
-          const reqDtoKey = findOperationsDefinitionsKey(node, [
+          const queryDto = findOperationsDefinitionsKey(node, [
+            "parameters",
+            "path",
+          ]);
+
+          // post body: parameters.body.xxRequest
+          // get body: parameters.query
+          const postBodyDto = findOperationsDefinitionsKey(node, [
             "parameters",
             "body",
             // "request",
-            /.*/,
+            /.*\b(request)|(param)|(req)\b/i, // 乱七八糟的key
           ]);
-          const resDtoKey = findOperationsDefinitionsKey(node, [
+
+          const getBodyDto = findOperationsDefinitionsKey(node, [
+            "parameters",
+            "query",
+          ]);
+
+          const bodyDto = postBodyDto || getBodyDto;
+
+          // parameters.path
+          const resDto = findOperationsDefinitionsKey(node, [
             "responses",
             200,
             "schema",
           ]);
-          return [reqDtoKey, resDtoKey];
+
+          return [queryDto, bodyDto, resDto];
         }
       }
     }
@@ -333,9 +348,52 @@ export function transformDefinitionKey(key: string | undefined) {
   return key.replace(/«/g, "").replace(/»/g, "").replace(/\s/g, "");
 }
 
+/** 考虑 /a/b/{c}/ => /a/b/  */
+export function formatFunctionName(
+  url: string,
+): [string, string[] | undefined] {
+  const queryPaths = url
+    .match(/\{[^\/]*\}/g)
+    ?.map(query => query.replace(/\{(.*)\}/, "$1"));
+  const formattedUrl = formatUrl(url);
+  const fnName = formattedUrl.replace(/\/.*\/(.*)/, "$1");
+  return [fnName, queryPaths];
+}
+
+/** url: /a/b/{c} => `/a/b/${c}` */
+export function formatTemplateUrl(
+  url: string,
+  queryKey: string,
+  needFormat: boolean = false,
+) {
+  if (!needFormat) {
+    return url;
+  }
+  let res = "";
+  const len = url.length;
+  for (let index = 0; index < len; index++) {
+    const char = url[index];
+    const isStart = char === "{";
+    if (isStart) {
+      res += "$";
+    }
+    res += char;
+    if (isStart) {
+      res += `${queryKey}.`;
+    }
+  }
+  return res;
+}
+
+/** 考虑 /a/b/{c} => /a/b */
+function formatUrl(url: string) {
+  return url.replace(/\/\{[^\/]*\}/g, "");
+}
+
 function getPath(url: string, prefix: string, suffix: string) {
   const projectRoot = getProjectRoot();
-  return path.join(projectRoot, prefix, path.dirname(url), suffix);
+  const formattedUrl = formatUrl(url);
+  return path.join(projectRoot, prefix, path.dirname(formattedUrl), suffix);
 }
 
 export function getDefinitionPathByUrl(url: string) {
@@ -343,7 +401,8 @@ export function getDefinitionPathByUrl(url: string) {
 }
 
 export function getRelativeDefinitionPathByUrl(url: string) {
-  return "@definitions" + path.dirname(url);
+  const formattedUrl = formatUrl(url);
+  return "@definitions" + path.dirname(formattedUrl);
 }
 
 // url: /admin/media/refluxCategory/addCategoryBinding

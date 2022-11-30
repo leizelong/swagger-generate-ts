@@ -230,7 +230,11 @@ export async function writeDefinitionFile(
   url: string,
 ) {
   const operationsDeclaration = getExportNamedDeclaration(tsAst, "operations");
-  const dtoKeys = getApiDefinitionKeys(operationsDeclaration, operationId);
+  const [_queryDto, bodyDto, resDto] = getApiDefinitionKeys(
+    operationsDeclaration,
+    operationId,
+  );
+  const dtoKeys = [bodyDto, resDto].map(item => item?.definitionsKey);
   const definitionsDeclaration = getExportNamedDeclaration(
     tsAst,
     "definitions",
