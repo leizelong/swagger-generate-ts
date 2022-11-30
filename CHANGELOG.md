@@ -1,6 +1,22 @@
 # 更新历史 
 
 
+### [0.0.7](https://github.com/leizelong/swagger-generate-ts/compare/v0.0.6...v0.0.7) (2022-11-30)
+
+
+### 📦 Chores | 其他更新
+
+* 修改yarn.lock ([832cff3](https://github.com/leizelong/swagger-generate-ts/commit/832cff30a4b38af5ee8623367e5d4f66158d2e29))
+* sentry字段优化 ([5ed9b57](https://github.com/leizelong/swagger-generate-ts/commit/5ed9b574d2c61e23b106e48703583729bc7905c7))
+* upgrade antd@5.x ([9e85252](https://github.com/leizelong/swagger-generate-ts/commit/9e85252103414296d1e63b0f16ba3006b2a227d4))
+
+
+### ✨ Features | 新功能
+
+* 提供路由url自动提示 ([3d5c797](https://github.com/leizelong/swagger-generate-ts/commit/3d5c7978ceca9149560d0ad9e942ddf54df37d2c))
+* 优化url query /a/b/{id}类型 ([ccda80c](https://github.com/leizelong/swagger-generate-ts/commit/ccda80c584f00d3d89e7b5e9b2577beb8b39135a))
+* 增加选择路由url自动提示功能 ([be0c30a](https://github.com/leizelong/swagger-generate-ts/commit/be0c30a06a33946e39ebe0993ef317fd79896775))
+
 ### [0.0.6](https://github.com/leizelong/swagger-generate-ts/compare/v0.0.5...v0.0.6) (2022-11-25)
 
 
