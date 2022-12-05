@@ -14,18 +14,14 @@
 
 * `Cmd+,` 打开用户设置，搜索`swagger-generate-ts.openApiJsonUrlOptions`
 ![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step1-setting.jpg?raw=true)
-* 配置项格式 value 是一个标准的openApiJson的get资源,可参考 https://editor.swagger.io 可在我们的SwaggerApiDocs平台上F12查看有没有类似的`api-docs`请求
+* 配置项格式 value 是一个标准的openApiJson的get资源,可参考 https://editor.swagger.io 可在我们的SwaggerApiDocs平台上F12查看有没有类似的`json`请求
 ``` json
 [
     {
-      "label": "admin",
-      "value": "http://xxx/admin/v2/api-docs"
+      "label": "openapi",
+      "value": "https://generator3.swagger.io/openapi.json"
     },
-    {
-      "label": "gmp-product-library-portal",
-      "value": "http://xxx/gmp-product-library-portal/v2/api-docs"
-    },
-  ]
+]
 ```
 ![](https://github.com/leizelong/swagger-generate-ts/blob/main/media/step1-options.jpg?raw=true)
 

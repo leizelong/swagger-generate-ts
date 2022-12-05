@@ -4,6 +4,8 @@
     "target": "ES2020",
     "lib": ["ES2020"],
     "sourceMap": true,
+    // "esModuleInterop": true,
+    // "allowSyntheticDefaultImports": true,
     "rootDir": "src",
     // "baseUrl": "./",
     // "paths": {

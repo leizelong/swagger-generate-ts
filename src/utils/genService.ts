@@ -19,6 +19,7 @@ import {
   getApiDefinitionKeys,
   getExportNamedDeclaration,
   getMethodOperationId,
+  getProjectRoot,
   getRelativeDefinitionPathByUrl,
   getServicePathByUrl,
   getTargetAst,
@@ -140,6 +141,7 @@ function insertMethod(
   ast: TsAst,
   url: string,
   method: Methods,
+  methods: string[],
   operationsDeclaration: TSInterfaceDeclaration,
   openApiJson: OpenApiJson,
 ) {
@@ -174,7 +176,11 @@ function insertMethod(
 
   const bodyKey = "data";
   const queryKey = "query";
-  const [exportFunctionName, queryPaths] = formatFunctionName(url);
+  const [exportFunctionName, queryPaths] = formatFunctionName(
+    url,
+    method,
+    methods,
+  );
   let templateUrl = formatTemplateUrl(url, queryKey, !!queryPaths?.length);
   const tempNode = templateElement(
     { cooked: templateUrl, raw: templateUrl },
@@ -217,13 +223,16 @@ function insertMethod(
     fnParamsNodes,
     fnNode,
   );
-  // todo 考虑 resDto
+
   if (resDto) {
-    let resTypeAnnotation: types.namedTypes.TSTypeReference;
+    let resTypeAnnotation:
+      | types.namedTypes.TSTypeReference
+      | types.namedTypes.TSTypeLiteral;
     if (resDto.definitionsKey) {
       resTypeAnnotation = tsTypeReference(identifier(resDefinitionKey));
     } else {
-      resTypeAnnotation = resDto.tSPropertySignature.typeAnnotation as any;
+      resTypeAnnotation = resDto.tSPropertySignature.typeAnnotation
+        ?.typeAnnotation as types.namedTypes.TSTypeLiteral;
     }
 
     fnDeclaration.returnType = tsTypeAnnotation(
@@ -265,6 +274,17 @@ async function generateFileByAst(ast: TsAst, filePath: string) {
   await fs.promises.writeFile(filePath, code, { encoding: "utf-8" });
 }
 
+function getRouteMethods(url: string, openApiJson: OpenApiJson): string[] {
+  const swaggerBasePath = openApiJson.basePath;
+  const relativePath = url.replace(swaggerBasePath, "");
+  const urlPathInfo = openApiJson?.paths?.[relativePath];
+  if (!urlPathInfo) {
+    return [];
+  }
+  const methods = Object.keys(urlPathInfo);
+  return methods;
+}
+
 async function genService(
   route: ReceiveData["routes"][0],
   servicePath: ReceiveData["servicePath"],
@@ -277,7 +297,15 @@ async function genService(
 
   initAstRequestImport(targetAst, method);
 
-  insertMethod(targetAst, url, method, operationsDeclaration, openApiJson);
+  const methods = getRouteMethods(url, openApiJson);
+  insertMethod(
+    targetAst,
+    url,
+    method,
+    methods,
+    operationsDeclaration,
+    openApiJson,
+  );
 
   await generateFileByAst(targetAst, serviceFilePath);
 }
@@ -288,11 +316,13 @@ export async function genServices(
 ) {
   const { openApiJson, openApiAst } = openApiData;
   const { servicePath, routes } = receiveData;
+
   // const projectRoot = getProjectRoot();
   // const { targetAst: testAst } = await getTargetAst(
   //   path.resolve(projectRoot, "src/services/test.ts"),
   // );
   // console.log("test.ts", testAst.program.body);
+
   const operationsDeclaration = getExportNamedDeclaration(
     openApiAst,
     "operations",

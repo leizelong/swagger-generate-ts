@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as tsParser from "recast/parsers/typescript.js";
-import { parse } from "recast";
+import { parse, types } from "recast";
 import * as path from "path";
 import * as vscode from "vscode";
 import type {
@@ -16,6 +16,8 @@ import { jsKeyWordBlackList } from "../constants";
 import json5 from "json5";
 
 const axios = require("axios");
+const _last = require("lodash/last");
+const camelCase = require("lodash/camelCase");
 
 export async function generateTsFiles(receiveData: ReceiveData) {
   const { openApiJsonUrl } = receiveData;
@@ -136,7 +138,7 @@ export function safeParse(data: string | Record<string, any>) {
 }
 
 function transformOpenApiJson(openApiJson: OpenApiJson) {
-  if (openApiJson.basePath === "/") {
+  if (!openApiJson.basePath || openApiJson.basePath === "/") {
     openApiJson.basePath = "";
   }
   return openApiJson;
@@ -156,7 +158,7 @@ export async function fetchOpenApiJson(url: string): Promise<OpenApiJson> {
   try {
     const res = await axios.get(url);
     let openApiJson = safeParse(res.data);
-    if (!openApiJson.swagger) {
+    if (!(openApiJson.swagger || openApiJson.openapi)) {
       throw new Error("不是标准的openApiJson");
     }
     openApiJson = transformOpenApiJson(openApiJson);
@@ -285,7 +287,7 @@ export function getApiDefinitionKeys(
           const resDto = findOperationsDefinitionsKey(node, [
             "responses",
             200,
-            "schema",
+            /.*(schema)|(content)\b/i, // 乱七八糟的key
           ]);
 
           return [queryDto, bodyDto, resDto];
@@ -296,7 +298,12 @@ export function getApiDefinitionKeys(
   throw new Error(`${operationId} 没有找到reqDtoKey或者resDtoKey`);
 }
 
-type TargetNames = "paths" | "definitions" | "operations" | "external";
+type TargetNames =
+  | "paths"
+  | "definitions"
+  | "operations"
+  | "external"
+  | "components";
 
 export function getExportNamedDeclaration(
   ast: TsAst,
@@ -320,15 +327,56 @@ export interface OpenApiData {
   openApiAst: TsAst;
 }
 
+function getSwaggerVersion(openApiJson: OpenApiJson) {
+  const version = openApiJson.swagger || openApiJson.openapi || "";
+  return Number(version[0]);
+}
+
 export async function getOpenApiData(url: string): Promise<OpenApiData> {
   const openApiJson = await fetchOpenApiJson(url);
-  const swaggerVersion = Number(openApiJson.swagger);
+  const swaggerVersion = getSwaggerVersion(openApiJson);
   const tsSourceCode = await openapiTS(openApiJson, {
     version: swaggerVersion,
   });
-  const openApiAst: TsAst = parse(tsSourceCode, {
+  let openApiAst: TsAst = parse(tsSourceCode, {
     parser: tsParser,
   });
+  // OpenAPI3 构造definitions export
+  if (swaggerVersion === 3) {
+    const {
+      exportNamedDeclaration,
+      tsInterfaceDeclaration,
+      identifier,
+      tsInterfaceBody,
+    } = types.builders;
+
+    const componentsDefinitions = getExportNamedDeclaration(
+      openApiAst,
+      "components",
+    );
+    const body = componentsDefinitions.body.body;
+    for (const node of body) {
+      if (
+        node.type === "TSPropertySignature" &&
+        node.key.type === "Identifier"
+      ) {
+        const name = node.key.name;
+        if (name === "schemas") {
+          const members: types.namedTypes.TSPropertySignature[] =
+            // @ts-ignore
+            node.typeAnnotation?.typeAnnotation?.members;
+
+          const customDefinitions = exportNamedDeclaration(
+            tsInterfaceDeclaration(
+              identifier("definitions"),
+              tsInterfaceBody(members),
+            ),
+          );
+          openApiAst.program.body.push(customDefinitions as any);
+        }
+      }
+    }
+  }
   return { openApiJson, openApiAst };
 }
 
@@ -351,12 +399,20 @@ export function transformDefinitionKey(key: string | undefined) {
 /** 考虑 /a/b/{c}/ => /a/b/  */
 export function formatFunctionName(
   url: string,
+  method: string,
+  methods: string[],
 ): [string, string[] | undefined] {
   const queryPaths = url
     .match(/\{[^\/]*\}/g)
     ?.map(query => query.replace(/\{(.*)\}/, "$1"));
   const formattedUrl = formatUrl(url);
-  const fnName = formattedUrl.replace(/\/.*\/(.*)/, "$1");
+  const paths = formattedUrl.split("/").filter(item => !!item);
+  // todo 考虑 restful api 加上 method
+  let fnName = _last(paths);
+  if (methods?.length) {
+    // restful api add method
+    fnName = camelCase(`${method} ${fnName}`);
+  }
   return [fnName, queryPaths];
 }
 

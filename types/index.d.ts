@@ -39,6 +39,7 @@ type RouteEntry = Record<
   }
 >;
 declare interface OpenApiJson {
+  openapi?: string;
   swagger: string;
   basePath: string;
   paths: RouteEntry;
