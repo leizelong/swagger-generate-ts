@@ -1,6 +1,13 @@
 # 更新历史 
 
 
+### [0.0.8](https://github.com/leizelong/swagger-generate-ts/compare/v0.0.7...v0.0.8) (2022-12-05)
+
+
+### ✨ Features | 新功能
+
+* 1. 优化restful api函数命名; 2. 支持部分OpenApiV3 ([3fd5762](https://github.com/leizelong/swagger-generate-ts/commit/3fd5762876ba0c2d4dc7696d7a5df068b06a770d))
+
 ### [0.0.7](https://github.com/leizelong/swagger-generate-ts/compare/v0.0.6...v0.0.7) (2022-11-30)
 
 
