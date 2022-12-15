@@ -17,6 +17,7 @@ import {
   formatFunctionName,
   formatTemplateUrl,
   getApiDefinitionKeys,
+  getConfiguration,
   getExportNamedDeclaration,
   getMethodOperationId,
   getProjectRoot,
@@ -34,10 +35,8 @@ import {
 function initAstRequestImport(ast: TsAst, method: Methods) {
   const { identifier, importDeclaration, importSpecifier, stringLiteral } =
     types.builders;
-  const requestImportPath: string =
-    vscode.workspace
-      .getConfiguration("swagger-generate-ts")
-      .get("requestImportPath") || "@/utils/request";
+  const requestImportPath = getConfiguration("requestImportPath");
+
   const { targetImportNode, lastImportNodeIdx } = getImportNodes(
     ast,
     requestImportPath,

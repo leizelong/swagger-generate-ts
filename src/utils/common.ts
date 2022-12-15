@@ -257,6 +257,9 @@ export function getApiDefinitionKeys(
   operationsDeclaration: ReturnType<typeof getExportNamedDeclaration>,
   operationId: string,
 ) {
+  const postBodyDtoRegexpStr = getConfiguration("postBodyDtoRegexp");
+  const postBodyDtoRegexp = new RegExp(postBodyDtoRegexpStr, "i");
+
   for (const node of operationsDeclaration.body.body) {
     if (node.type === "TSPropertySignature") {
       if (node.key.type === "Identifier") {
@@ -273,7 +276,8 @@ export function getApiDefinitionKeys(
             "parameters",
             "body",
             // "request",
-            /.*(request)|(param)|(req)\b/i, // 乱七八糟的key
+            // todo 配置化，简直受不了
+            postBodyDtoRegexp, // 乱七八糟的key
           ]);
 
           const getBodyDto = findOperationsDefinitionsKey(node, [
@@ -392,8 +396,10 @@ export function transformDefinitionKey(key: string | undefined) {
   if (!key) {
     return "";
   }
+  // 标识符的无效字符集
+  const charReg = /[^\u4E00-\u9FA5A-Za-z0-9_$]/g;
   key = protectKey(key);
-  return key.replace(/«/g, "").replace(/»/g, "").replace(/\s/g, "");
+  return key.replace(charReg, "");
 }
 
 /** 考虑 /a/b/{c}/ => /a/b/  */
@@ -510,4 +516,19 @@ export async function getTotalRoutesByUrl(openApiJsonUrl: string) {
     }
   }
   return { totalRoutes, urlRoutes };
+}
+
+type ConfigurationKeys =
+  | "requestImportPath"
+  | "postBodyDtoRegexp"
+  | "openApiJsonUrlOptions";
+
+export function getConfiguration(configKey: ConfigurationKeys): string {
+  const configValue = vscode.workspace
+    .getConfiguration("swagger-generate-ts")
+    .get<string>(configKey);
+  if (!configValue) {
+    throw new Error(`配置项${configKey}无效`);
+  }
+  return configValue;
 }
