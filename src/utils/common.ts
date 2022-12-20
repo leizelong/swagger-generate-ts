@@ -415,7 +415,7 @@ export function formatFunctionName(
   const paths = formattedUrl.split("/").filter(item => !!item);
   // todo 考虑 restful api 加上 method
   let fnName = _last(paths);
-  if (methods?.length) {
+  if (methods.length > 1) {
     // restful api add method
     fnName = camelCase(`${method} ${fnName}`);
   }
