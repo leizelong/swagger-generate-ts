@@ -54,7 +54,7 @@
         },
         "swagger-generate-ts.postBodyDtoRegexp": {
           "type": "string",
-          "default": ".*(request)|(param)|(req)|(dtos?)\\b",
+          "default": ".*(request)|(param)|(req)|(schema)|(dtos?)\\b",
           "description": "从definition中寻找路径为parameters.body.[reg]的Dto"
         }
       }
