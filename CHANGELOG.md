@@ -1,6 +1,28 @@
 # 更新历史 
 
 
+### [0.0.9](https://github.com/leizelong/swagger-generate-ts/compare/v0.0.8...v0.0.9) (2023-01-06)
+
+
+### ✨ Features | 新功能
+
+* 增加配置项,弥补寻找postBody路径问题,postBodyDtoRegexp ([61d1e88](https://github.com/leizelong/swagger-generate-ts/commit/61d1e88149f2d3341b478709d938144628081eb5))
+
+
+### 🐛 Bug Fixes | Bug 修复
+
+* 修复只有一种请求方式,请求方法名称不带上method ([eb72bee](https://github.com/leizelong/swagger-generate-ts/commit/eb72beeb34b66bd55eaa990d63b54aff2750c741))
+
+
+### 📝 Documentation | 文档
+
+* add .npmrc ([ca81501](https://github.com/leizelong/swagger-generate-ts/commit/ca81501e7c20cd27c46f2c75bab36a3afc17da06))
+
+
+### 📦 Chores | 其他更新
+
+* 修改postBodyDtoRegexp默认值 ([0f6acd5](https://github.com/leizelong/swagger-generate-ts/commit/0f6acd579a5c06fc93813fe0798aadd2e471be69))
+
 ### [0.0.8](https://github.com/leizelong/swagger-generate-ts/compare/v0.0.7...v0.0.8) (2022-12-05)
 
 
