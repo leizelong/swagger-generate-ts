@@ -2,7 +2,7 @@
   "name": "swagger-generate-ts",
   "displayName": "swagger-generate-ts",
   "description": "Swagger api 文档生成Interface",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "engines": {
     "vscode": "^1.73.0"
   },

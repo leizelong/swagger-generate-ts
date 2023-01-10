@@ -1,6 +1,13 @@
 # 更新历史 
 
 
+### [0.0.10](https://github.com/leizelong/swagger-generate-ts/compare/v0.0.9...v0.0.10) (2023-01-10)
+
+
+### ✨ Features | 新功能
+
+* 增加配置项returnData：是否返回Promise<ResDto[data]> ([299ba45](https://github.com/leizelong/swagger-generate-ts/commit/299ba45f9d10df0d72654b69a2d6cc120c6370d0))
+
 ### [0.0.9](https://github.com/leizelong/swagger-generate-ts/compare/v0.0.8...v0.0.9) (2023-01-06)
 
 
