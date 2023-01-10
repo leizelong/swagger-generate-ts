@@ -1,7 +1,4 @@
 # Welcome to your Swagger Generate Ts
-[![Current Version](https://vsmarketplacebadge.apphb.com/version/leizl.swagger-generate-ts.svg)](https://marketplace.visualstudio.com/items?itemName=leizl.swagger-generate-ts)
-[![Install Count](https://vsmarketplacebadge.apphb.com/installs/leizl.swagger-generate-ts.svg)](https://marketplace.visualstudio.com/items?itemName=leizl.swagger-generate-ts)
-[![Open Issues](https://vsmarketplacebadge.apphb.com/rating/leizl.swagger-generate-ts.svg)](https://marketplace.visualstudio.com/items?itemName=leizl.swagger-generate-ts)
 
 ## Description
 * We can use this plugin to generate Ts declarations and Ts request files through Swagger Api Json
