@@ -52,6 +52,11 @@
           "default": "@/utils/request",
           "description": "import { get, post } from '${requestImportPath}'"
         },
+        "swagger-generate-ts.returnData": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否返回Promise<ResDto['data']>"
+        },
         "swagger-generate-ts.postBodyDtoRegexp": {
           "type": "string",
           "default": ".*(request)|(param)|(req)|(schema)|(dtos?)\\b",

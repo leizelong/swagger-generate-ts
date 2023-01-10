@@ -521,13 +521,14 @@ export async function getTotalRoutesByUrl(openApiJsonUrl: string) {
 type ConfigurationKeys =
   | "requestImportPath"
   | "postBodyDtoRegexp"
-  | "openApiJsonUrlOptions";
+  | "openApiJsonUrlOptions"
+  | "returnData";
 
-export function getConfiguration(configKey: ConfigurationKeys): string {
+export function getConfiguration<T = string>(configKey: ConfigurationKeys): T {
   const configValue = vscode.workspace
     .getConfiguration("swagger-generate-ts")
-    .get<string>(configKey);
-  if (!configValue) {
+    .get<T>(configKey);
+  if (configValue === undefined) {
     throw new Error(`配置项${configKey}无效`);
   }
   return configValue;

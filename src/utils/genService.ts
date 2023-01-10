@@ -156,6 +156,9 @@ function insertMethod(
     templateElement,
     tsTypeAnnotation,
     tsTypeParameterInstantiation,
+    tsIndexedAccessType,
+    tsLiteralType,
+    stringLiteral,
   } = types.builders;
 
   const operationId = getMethodOperationId(openApiJson, url, method);
@@ -233,11 +236,21 @@ function insertMethod(
       resTypeAnnotation = resDto.tSPropertySignature.typeAnnotation
         ?.typeAnnotation as types.namedTypes.TSTypeLiteral;
     }
+    let returnData = getConfiguration<boolean>("returnData");
+    let paramTsType;
+    if (returnData) {
+      paramTsType = tsIndexedAccessType(
+        resTypeAnnotation,
+        tsLiteralType(stringLiteral("data")),
+      );
+    } else {
+      paramTsType = resTypeAnnotation;
+    }
 
     fnDeclaration.returnType = tsTypeAnnotation(
       tsTypeReference(
         identifier("Promise"),
-        tsTypeParameterInstantiation([resTypeAnnotation]),
+        tsTypeParameterInstantiation([paramTsType]),
       ),
     );
   }
